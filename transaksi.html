@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Daftar Transaksi | Admin Dashboard</title>
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    
+    <link href="./src/output.css" rel="stylesheet">
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+</head>
+<body class="bg-[#f8f9fa] font-sans text-gray-800 antialiased" x-data="{ sidebarOpen: true }">
+
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar -->
+        <aside 
+            class="fixed inset-y-0 left-0 z-50 flex flex-col bg-brand-500 text-white transition-all duration-300 ease-in-out md:static md:block shrink-0 shadow-xl"
+            :class="sidebarOpen ? 'w-64 translate-x-0' : '-translate-x-full md:translate-x-0 md:w-20'">
+            
+            <!-- Sidebar Header -->
+            <div class="flex h-[72px] items-center justify-center px-4 shrink-0 font-bold tracking-wider">
+                <!-- Full Logo -->
+                <h1 x-show="sidebarOpen" class="text-2xl w-full text-center" x-transition.opacity>Admin</h1>
+                <!-- Mini Logo -->
+                <h1 x-show="!sidebarOpen" class="text-2xl hidden md:block" x-cloak>A</h1>
+            </div>
+
+            <!-- Sidebar Nav -->
+            <nav class="flex-1 space-y-2 overflow-y-auto px-3 py-4 scrollbar-hide">
+                <a href="index.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                    <i class="bx bx-grid-alt text-xl shrink-0 opacity-80"></i>
+                    <span x-show="sidebarOpen" class="whitespace-nowrap">Dashboard</span>
+                </a>
+
+                <a href="kategori.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                    <i class="bx bx-layer text-xl shrink-0 opacity-80"></i>
+                    <span x-show="sidebarOpen" class="whitespace-nowrap">Kategori</span>
+                </a>
+
+                <a href="alat.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                    <i class="bx bx-wrench text-xl shrink-0 opacity-80"></i>
+                    <span x-show="sidebarOpen" class="whitespace-nowrap">Alat Produksi</span>
+                </a>
+
+                <a href="transaksi.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none bg-white text-brand-700 shadow-sm" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                    <i class="bx bx-shopping-bag text-xl shrink-0"></i>
+                    <span x-show="sidebarOpen" class="whitespace-nowrap">Daftar Transaksi</span>
+                    <div x-show="sidebarOpen" class="ml-auto flex h-2 w-2 shrink-0 rounded-full bg-brand-500"></div>
+                </a>
+
+                <a href="pengembalian.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                    <i class="bx bx-archive-in text-xl shrink-0 opacity-80"></i>
+                    <span x-show="sidebarOpen" class="whitespace-nowrap">Pengembalian</span>
+                </a>
+
+                <a href="pelanggan.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                    <i class="bx bx-group text-xl shrink-0 opacity-80"></i>
+                    <span x-show="sidebarOpen" class="whitespace-nowrap">Pelanggan UMKM</span>
+                </a>
+
+                <a href="pengaturan.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                    <i class="bx bx-cog text-xl shrink-0 opacity-80"></i>
+                    <span x-show="sidebarOpen" class="whitespace-nowrap">Pengaturan Sistem</span>
+                </a>
+
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="p-4" :class="sidebarOpen ? '' : 'md:px-2'">
+                <a href="#" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-white transition-all hover:bg-brand-600 focus:outline-none" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                    <i class='bx bx-log-out text-xl shrink-0 opacity-80'></i>
+                    <span x-show="sidebarOpen" class="whitespace-nowrap">Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Wrapper -->
+        <div class="flex flex-1 flex-col overflow-hidden transition-all duration-300">
+            
+            <!-- Navbar -->
+            <header class="flex h-[72px] items-center justify-between bg-brand-500 px-6 shrink-0 shadow-sm border-b border-brand-600/30">
+                <div class="flex items-center gap-4">
+                    <!-- Hamburger Toggle -->
+                    <button @click="sidebarOpen = !sidebarOpen" class="text-white hover:bg-brand-600 rounded-lg p-2 transition focus:outline-none">
+                        <i class='bx bx-menu text-2xl'></i>
+                    </button>
+                    <!-- Current Page Title -->
+                    <span class="text-lg font-medium text-white hidden sm:block capitalize">
+                        Daftar Transaksi
+                    </span>
+                </div>
+
+                <!-- Right Side Topbar -->
+                <div class="flex items-center gap-3 sm:gap-5 text-white">
+                    <button class="relative rounded-lg p-2 hover:bg-brand-600 transition focus:outline-none">
+                        <i class='bx bx-bell text-xl'></i>
+                        <span class="absolute right-1.5 top-1.5 flex h-2.5 w-2.5 items-center justify-center rounded-full bg-[#f9db72] border-2 border-brand-500"></span>
+                    </button>
+                    
+                    <div class="flex items-center gap-3 pl-3 sm:pl-5 relative before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-8 before:w-px before:bg-brand-400">
+                        <div class="hidden sm:flex flex-col text-right justify-center">
+                            <span class="text-sm font-semibold leading-tight">Eriko</span>
+                            <span class="text-[10px] text-brand-400 font-medium mt-0.5 uppercase tracking-wider">ADMIN</span>
+                        </div>
+                        <button class="h-9 w-9 overflow-hidden rounded-full bg-white/10 hover:bg-white/20 border border-white/20 transition flex items-center justify-center focus:outline-none">
+                            <!-- Could be image -->
+                            <i class='bx bx-user text-xl text-white'></i>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main class="flex-1 overflow-x-hidden overflow-y-auto w-full">
+                <!-- Inner padding wrapper -->
+                <div class="mx-auto w-full p-6">
+                    
+<div>
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+        <h2 class="text-2xl font-bold text-gray-800">Daftar Transaksi</h2>
+        
+        <div class="flex items-center gap-3">
+            <div class="relative">
+                <i class='bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg'></i>
+                <input type="text" placeholder="Cari invoice atau UMKM..." class="pl-10 pr-4 py-2 w-full sm:w-64 rounded-xl border border-gray-200 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-colors">
+            </div>
+            
+            <button class="flex shrink-0 items-center gap-2 rounded-xl bg-white border border-gray-200 px-4 py-2 text-sm font-medium text-gray-700 transition-all hover:bg-gray-50 focus:outline-none shadow-sm">
+                <i class='bx bx-filter-alt text-lg'></i>
+                <span class="hidden sm:inline">Filter</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 overflow-hidden">
+        <div class="overflow-x-auto w-full">
+            <table class="w-full text-left text-sm text-gray-500">
+                <thead class="bg-gray-50/50 text-xs uppercase text-gray-400 border-b border-gray-100">
+                    <tr>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Invoice & UMKM</th>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Item Disewa</th>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Tgl Sewa</th>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Metode</th>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Total</th>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-4 font-semibold tracking-wider text-right">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    <!-- Data dummy 1 -->
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="px-6 py-4">
+                            <span class="block font-medium text-gray-900 border-b border-gray-100 pb-1 mb-1">INV-0123</span>
+                            <span class="text-xs text-gray-500">RM Salero Kita</span>
+                        </td>
+                        <td class="px-6 py-4 text-xs">
+                            <div class="font-medium text-gray-700">2x Mesin Press Cup</div>
+                            <div class="text-gray-400">+1 Item lainnya</div>
+                        </td>
+                        <td class="px-6 py-4 text-xs">
+                            <span class="block"><i class='bx bx-calendar mr-1'></i>24 - 26 Feb 26</span>
+                            <span class="block text-gray-400 mt-1">(3 Hari)</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center gap-1 rounded bg-gray-100 px-2 py-1 text-[10px] font-semibold text-gray-600 uppercase">
+                                <i class='bx bx-store'></i> Ambil Sendiri
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 font-medium text-gray-900">
+                            Rp 450.000
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center gap-1 rounded-full bg-orange-100 px-2.5 py-1 text-xs font-semibold text-orange-600">
+                                Menunggu Diambil
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="rounded-lg bg-brand-50 text-brand-600 px-3 py-1.5 text-xs font-medium hover:bg-brand-100 transition-colors focus:outline-none">
+                                Verifikasi Serah Terima
+                            </button>
+                        </td>
+                    </tr>
+                    
+                    <!-- Data dummy 2 -->
+                    <tr class="hover:bg-gray-50/50 transition-colors">
+                        <td class="px-6 py-4">
+                            <span class="block font-medium text-gray-900 border-b border-gray-100 pb-1 mb-1">INV-0124</span>
+                            <span class="text-xs text-gray-500">Kafe Senja</span>
+                        </td>
+                        <td class="px-6 py-4 text-xs">
+                            <div class="font-medium text-gray-700">1x Tenda 3x3m</div>
+                            <div class="font-medium text-gray-700">5x Kursi Lipat</div>
+                        </td>
+                        <td class="px-6 py-4 text-xs">
+                            <span class="block"><i class='bx bx-calendar mr-1'></i>25 - 28 Feb 26</span>
+                            <span class="block text-gray-400 mt-1">(4 Hari)</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center gap-1 rounded bg-blue-50 px-2 py-1 text-[10px] font-semibold text-blue-600 uppercase">
+                                <i class='bx bx-truck'></i> Kirim via Kurir
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 font-medium text-gray-900">
+                            Rp 650.000 <span class="text-[10px] items-center text-gray-500 block font-normal">(inc. Ongkir)</span>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-1 text-xs font-semibold text-green-600">
+                                Sedang Disewa
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="rounded-lg bg-gray-50 text-gray-600 px-3 py-1.5 text-xs font-medium hover:bg-gray-100 transition-colors focus:outline-none border border-gray-200">
+                                Detail
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="bg-gray-50/50 p-4 sm:flex sm:items-center sm:justify-between border-t border-gray-100 rounded-b-2xl">
+            <p class="text-sm text-gray-500">Menampilkan <span class="font-medium text-gray-700">1</span> sampai <span class="font-medium text-gray-700">2</span> dari <span class="font-medium text-gray-700">45</span> transaksi</p>
+            <div class="mt-4 sm:mt-0 flex gap-2">
+                <button class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed focus:outline-none" disabled>Prev</button>
+                <button class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">Next</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+                </div>
+            </main>
+
+            <!-- Footer -->
+            <footer class="bg-[#f8f9fa] px-6 py-4 text-center sm:text-right text-[13px] text-gray-400 font-medium shrink-0">
+                &copy; 2026 Admin Dashboard. All rights reserved.
+            </footer>
+        </div>
+        
+        <!-- Overlay on mobile to close sidebar -->
+        <div 
+            x-show="sidebarOpen" 
+            @click="sidebarOpen = false" 
+            class="fixed inset-0 z-40 bg-brand-700/50 backdrop-blur-sm transition-opacity md:hidden" 
+            x-transition.opacity>
+        </div>
+
+    </div>
+
+</body>
+</html>
