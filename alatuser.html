@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog - SewaIn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F1F5F9;
+            overflow: hidden;
+        }
+
+        .cartoon-border {
+            border: 3px solid #000;
+        }
+
+        .cartoon-shadow {
+            box-shadow: 6px 6px 0px 0px rgba(0, 0, 0, 1);
+        }
+
+        .cartoon-shadow-sm {
+            box-shadow: 3px 3px 0px 0px rgba(0, 0, 0, 1);
+        }
+
+        .cartoon-button:active {
+            transform: translate(3px, 3px);
+            box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 1);
+        }
+
+        .text-primary {
+            color: #1E3A8A;
+        }
+
+        .bg-primary {
+            background-color: #1E3A8A;
+        }
+
+        .bg-aksen {
+            background-color: #14B8A6;
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: #000;
+            border: 2px solid #F1F5F9;
+        }
+
+        .category-btn.active {
+            background-color: #1E3A8A;
+            color: white;
+            border-color: black;
+            box-shadow: 3px 3px 0px 0px #000;
+        }
+    </style>
+</head>
+
+<body class="h-screen flex flex-col">
+
+    <nav class="flex-none bg-white border-b-4 border-black z-50">
+        <div class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-2">
+                <div
+                    class="w-8 h-8 bg-primary cartoon-border rounded-lg flex items-center justify-center cartoon-shadow-sm">
+                    <i data-lucide="layers" class="text-white w-4 h-4"></i>
+                </div>
+                <span class="text-lg font-black text-slate-900 tracking-tighter uppercase italic">Sewa<span
+                        class="text-primary">In</span></span>
+            </a>
+            <div class="flex items-center gap-6">
+                <a href="index.html"
+                    class="text-xs font-black text-slate-500 hover:text-primary transition-all uppercase italic">Beranda</a>
+                <a href="login.html">
+                    <div
+                        class="w-9 h-9 rounded-xl bg-white cartoon-border cartoon-shadow-sm flex items-center justify-center text-slate-900">
+                        <i data-lucide="user" class="w-5 h-5"></i>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex flex-1 overflow-hidden">
+        <aside class="w-72 bg-white border-r-4 border-black p-6 hidden lg:flex flex-col">
+            <h3 class="text-[18px] font-black text-slate-400 uppercase tracking-widest mb-6 italic">Kategori Alat</h3>
+            <nav class="space-y-3 flex-1" id="categoryNav">
+                <button onclick="filterKategori('Semua', this)"
+                    class="category-btn active w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
+                    Semua Alat
+                </button>
+                <button onclick="filterKategori('Pengolah Makanan', this)"
+                    class="category-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
+                    Pengolah Makanan
+                </button>
+                <button onclick="filterKategori('Bakery', this)"
+                    class="category-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
+                    Bakery & Kue
+                </button>
+                <button onclick="filterKategori('Alat Mesin', this)"
+                    class="category-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
+                    Alat Mesin
+                </button>
+                <button onclick="filterKategori('Kebun', this)"
+                    class="category-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
+                    Pertanian & Kebun
+                </button>
+            </nav>
+
+            <div class="p-5 bg-yellow-300 cartoon-border cartoon-shadow-sm rounded-2xl mt-auto">
+                <p class="text-[9px] font-black text-black uppercase italic">Butuh Bantuan?</p>
+                <p class="text-[10px] text-black font-bold mt-1 mb-3">Tim kami siap membantu Anda.</p>
+                <button
+                    class="w-full py-2 bg-white cartoon-border rounded-lg text-[9px] font-black text-primary cartoon-button uppercase italic">HUBUNGI
+                    ADMIN</button>
+            </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto custom-scroll p-8 bg-[#F1F5F9]">
+            <div class="max-w-[1400px] mx-auto">
+                <div class="flex items-center justify-between mb-8">
+                    <div>
+                        <h1 id="kategoriTitle"
+                            class="text-3xl font-black text-slate-900 tracking-tight uppercase italic bg-yellow-300 inline-block px-2 cartoon-border">
+                            Semua Alat</h1>
+                        <p class="text-slate-500 text-xs font-black mt-2 uppercase italic">Menampilkan alat-alat pilihan
+                            terbaik</p>
+                    </div>
+                </div>
+
+                <div id="produkGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-24">
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <a href="keranjang.html"
+        class="fixed bottom-8 right-8 z-[100] bg-aksen text-white px-8 py-5 rounded-2xl cartoon-border cartoon-shadow flex items-center gap-3 cartoon-button transition-all group">
+        <div class="relative">
+            <i data-lucide="shopping-bag" class="w-7 h-7 text-white"></i>
+            <span id="cartCount"
+                class="absolute -top-3 -right-3 bg-red-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-black animate-bounce">0</span>
+        </div>
+        <span class="font-black text-sm tracking-tight uppercase italic">Lihat Keranjang</span>
+    </a>
+
+    <div id="qtyModal" class="fixed inset-0 z-[110] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="closeQtyModal()"></div>
+        <div
+            class="bg-white w-full max-w-xs rounded-[2.5rem] p-8 cartoon-border cartoon-shadow relative z-20 text-center">
+            <h4 id="qtyModalTitle" class="font-black text-slate-900 text-lg mb-2 uppercase italic leading-tight">Jumlah
+                Sewa</h4>
+            <p id="qtyModalPrice" class="text-primary font-black text-base mb-6 italic bg-yellow-100 inline-block px-2">
+                Rp0/hari</p>
+            <div class="flex items-center bg-slate-50 rounded-2xl p-2 cartoon-border mb-6">
+                <button onclick="changeModalQty(-1)"
+                    class="w-12 h-12 flex items-center justify-center text-slate-900 font-black text-2xl">-</button>
+                <input type="number" id="modalQtyInput" value="1"
+                    class="w-full bg-transparent text-center text-xl font-black text-slate-900 outline-none" readonly>
+                <button onclick="changeModalQty(1)"
+                    class="w-12 h-12 flex items-center justify-center text-slate-900 font-black text-2xl">+</button>
+            </div>
+            <button id="confirmAddBtn"
+                class="w-full bg-primary text-white py-4 rounded-2xl font-black text-[11px] tracking-widest cartoon-border cartoon-shadow-sm cartoon-button uppercase italic">
+                TAMBAHKAN KE KERANJANG
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // DATA SEMUA PRODUK
+        const dataProduk = [
+            { id: 1, nama: 'Mixer Planeteri 10L', harga: 75000, kategori: 'Bakery', icon: 'chef-hat' },
+            { id: 2, nama: 'Oven Deck Otomatis', harga: 120000, kategori: 'Bakery', icon: 'flame' },
+            { id: 3, nama: 'Penggiling Daging', harga: 55000, kategori: 'Pengolah Makanan', icon: 'utensils' },
+            { id: 4, nama: 'Mesin Bor Beton', harga: 45000, kategori: 'Alat Mesin', icon: 'wrench' },
+            { id: 5, nama: 'Traktor Mini', harga: 250000, kategori: 'Kebun', icon: 'tractor' },
+            { id: 6, nama: 'Mesin Jahit Industri', harga: 85000, kategori: 'Alat Mesin', icon: 'scissors' },
+            { id: 7, nama: 'Pemotong Keripik', harga: 30000, kategori: 'Pengolah Makanan', icon: 'slice' },
+            { id: 8, nama: 'Vacuum Sealer', harga: 40000, kategori: 'Pengolah Makanan', icon: 'package' }
+        ];
+
+        let currentSelectedAlat = null;
+
+        // FUNGSI RENDER PRODUK KE GRID
+        function renderProduk(filter = 'Semua') {
+            const grid = document.getElementById('produkGrid');
+            grid.innerHTML = '';
+
+            const produkFiltered = filter === 'Semua'
+                ? dataProduk
+                : dataProduk.filter(p => p.kategori === filter);
+
+            produkFiltered.forEach(p => {
+                grid.innerHTML += `
+                    <div class="bg-white rounded-[2rem] p-5 cartoon-border cartoon-shadow hover:translate-y-[-4px] transition-all duration-300 group">
+                        <div class="bg-slate-100 cartoon-border rounded-[1.5rem] aspect-square mb-4 flex items-center justify-center relative overflow-hidden">
+                            <i data-lucide="${p.icon || 'package'}" class="text-slate-300 w-16 h-16 group-hover:scale-110 transition duration-500"></i>
+                            <div class="absolute top-3 left-3 bg-aksen text-white text-[8px] font-black px-3 py-1 cartoon-border rounded-full uppercase">Tersedia</div>
+                        </div>
+                        <div class="px-1">
+                            <p class="text-aksen font-black text-[10px] uppercase tracking-tighter italic">${p.kategori}</p>
+                            <h3 class="font-black text-sm text-slate-900 truncate uppercase italic">${p.nama}</h3>
+                            <div class="flex items-baseline gap-1 mt-1 mb-4">
+                                <span class="text-xl font-black text-primary italic">Rp${(p.harga / 1000)}k</span>
+                                <span class="text-slate-400 font-black text-[10px] uppercase">/hari</span>
+                            </div>
+                            <div class="flex gap-3">
+                                <button onclick="openQtyModal(${p.id}, '${p.nama}', ${p.harga})" class="flex-none bg-yellow-300 text-black p-3 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button transition-all">
+                                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                                </button>
+                                <a href="detailalat.html?id=${p.id}" class="flex-1 bg-primary text-white py-3 rounded-xl font-black text-[9px] flex items-center justify-center gap-2 cartoon-border cartoon-shadow-sm cartoon-button uppercase italic tracking-widest">
+                                    DETAIL
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            lucide.createIcons();
+        }
+
+        // FUNGSI FILTER KATEGORI
+        function filterKategori(kat, btn) {
+            // Update Title
+            document.getElementById('kategoriTitle').innerText = kat === 'Semua' ? 'Semua Alat' : kat;
+
+            // Update Active Class Button
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Render Ulang
+            renderProduk(kat);
+        }
+
+        // LOGIKA MODAL & KERANJANG
+        function openQtyModal(id, nama, harga) {
+            currentSelectedAlat = { id, nama, harga };
+            document.getElementById('qtyModalTitle').innerText = "Sewa " + nama;
+            document.getElementById('qtyModalPrice').innerText = "Rp" + harga.toLocaleString('id-ID') + "/hari";
+            document.getElementById('modalQtyInput').value = 1;
+            document.getElementById('qtyModal').classList.remove('hidden');
+        }
+
+        function closeQtyModal() { document.getElementById('qtyModal').classList.add('hidden'); }
+
+        function changeModalQty(delta) {
+            const input = document.getElementById('modalQtyInput');
+            let val = parseInt(input.value) + delta;
+            if (val < 1) val = 1;
+            input.value = val;
+        }
+
+        function konfirmasiTambah() {
+            const qty = parseInt(document.getElementById('modalQtyInput').value);
+            let keranjang = JSON.parse(localStorage.getItem('keranjangSewaIn')) || [];
+            const index = keranjang.findIndex(item => item.id === currentSelectedAlat.id);
+
+            if (index === -1) {
+                keranjang.push({ ...currentSelectedAlat, qty: qty, durasi: 1 });
+            } else {
+                keranjang[index].qty += qty;
+            }
+
+            localStorage.setItem('keranjangSewaIn', JSON.stringify(keranjang));
+            updateBadge();
+            closeQtyModal();
+            // Notifikasi ala cartoon
+            const toast = document.createElement('div');
+            toast.className = "fixed top-5 left-1/2 -translate-x-1/2 z-[200] bg-yellow-300 cartoon-border cartoon-shadow px-6 py-3 font-black uppercase italic text-xs animate-bounce";
+            toast.innerText = `🚀 ${qty} ${currentSelectedAlat.nama} Berhasil Masuk Keranjang!`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2500);
+        }
+
+        function updateBadge() {
+            let keranjang = JSON.parse(localStorage.getItem('keranjangSewaIn')) || [];
+            const totalItems = keranjang.reduce((acc, item) => acc + item.qty, 0);
+            const badge = document.getElementById('cartCount');
+            if (badge) {
+                badge.innerText = totalItems;
+                badge.style.display = totalItems > 0 ? 'flex' : 'none';
+            }
+        }
+
+        document.getElementById('confirmAddBtn').onclick = konfirmasiTambah;
+
+        window.onload = () => {
+            // Setiap kali masuk ke katalog, hapus mode "langsung" 
+            // agar kalau klik icon keranjang, isinya kembali normal.
+            localStorage.removeItem('mode_checkout');
+            localStorage.removeItem('checkout_cepat');
+
+            renderProduk(); // Fungsi render produk kamu
+            updateBadge();  // Fungsi update jumlah keranjang kamu
+        };
+
+        function updateNavbarProfil() {
+            const userData = JSON.parse(localStorage.getItem('userSewaIn'));
+            const authContainer = document.getElementById('authContainer'); // ID div tempat tombol login/profil
+
+            if (userData && userData.isLogin) {
+                // Jika sudah login, tampilkan tombol Profil
+                authContainer.innerHTML = `
+            <div class="flex items-center gap-3 bg-white p-1 pr-4 rounded-full border-2 border-slate-100 shadow-sm">
+                <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                </div>
+                <button onclick="bukaModalProfil()" class="text-[10px] font-black uppercase italic text-slate-900">
+                    ${userData.nama}
+                </button>
+                <button onclick="logout()" class="text-red-500 hover:text-red-700">
+                    <i data-lucide="log-out" class="w-4 h-4"></i>
+                </button>
+            </div>
+        `;
+            }
+            lucide.createIcons();
+        }
+
+        function logout() {
+            localStorage.removeItem('userSewaIn');
+            location.reload();
+        }
+    </script>
+</body>
+
+</html>

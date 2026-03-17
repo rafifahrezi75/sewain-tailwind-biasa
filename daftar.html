@@ -1,0 +1,151 @@
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+<style>
+    body {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        background-color: #F1F5F9;
+    }
+
+    .text-primary {
+        color: #1E3A8A;
+    }
+
+    .bg-primary {
+        background-color: #1E3A8A;
+    }
+
+    .bg-aksen {
+        background-color: #14B8A6;
+    }
+
+    .text-aksen {
+        color: #14B8A6;
+    }
+
+    .focus-ring:focus {
+        border-color: #14B8A6;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+    }
+</style>
+
+<div class="min-h-screen flex items-center justify-center p-6">
+    <div
+        class="max-w-4xl w-full bg-white rounded-[2.5rem] shadow-2xl shadow-blue-900/10 overflow-hidden flex flex-col md:flex-row-reverse">
+
+        <div class="hidden md:flex md:w-[45%] bg-primary p-10 flex-col justify-between relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-64 h-64 bg-white/5 rounded-full -ml-32 -mt-32"></div>
+            <div class="absolute bottom-0 right-0 w-48 h-48 bg-aksen/20 rounded-full -mr-24 -mb-24 blur-3xl"></div>
+
+            <div class="relative z-10">
+                <div class="flex items-center gap-2 mb-8">
+                    <div class="w-9 h-9 bg-white rounded-xl flex items-center justify-center shadow-lg">
+                        <i data-lucide="layers" class="text-primary w-5 h-5"></i>
+                    </div>
+                    <span class="text-xl font-bold text-white tracking-tighter">SewaIn.</span>
+                </div>
+                <h2 class="text-3xl font-bold text-white leading-tight mb-5">
+                    Mulai Perjalanan <br><span class="text-aksen">Bisnismu Bersama Kami.</span>
+                </h2>
+                <ul class="space-y-3 text-blue-100/90 text-md">
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle" class="text-aksen w-4 h-4"></i>
+                        Akses 100+ Alat Produksi</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle" class="text-aksen w-4 h-4"></i>
+                        Cek Stok Alat Produksi</li>
+                    <li class="flex items-center gap-3"><i data-lucide="check-circle" class="text-aksen w-4 h-4"></i>
+                        Proses Peminjaman mudah dan cepat</li>
+                </ul>
+            </div>
+
+            <div class="relative z-10 text-center p-3 bg-white/5 border border-white/10 rounded-xl">
+                <p class="text-white/80 text-[10px] font-medium uppercase tracking-widest">Wujudkan Impian Bisnismu Di
+                    SewaIn</p>
+            </div>
+        </div>
+
+        <div class="w-full md:w-[55%] p-8 md:p-12">
+            <div class="mb-6">
+                <a href="index.html"
+                    class="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-primary transition-colors group">
+                    <i data-lucide="arrow-left" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform"></i>
+                    Kembali ke Beranda
+                </a>
+            </div>
+
+            <div class="mb-8">
+                <h1 class="text-2xl font-black text-slate-900 mb-1 tracking-tight">Buat Akun Baru</h1>
+                <p class="text-slate-500 text-sm font-medium">Lengkapi data untuk mulai menyewa.</p>
+            </div>
+
+            <form action="index.html" class="space-y-4">
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1.5 ml-1">Nama Lengkap</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                        </span>
+                        <input type="text" required placeholder="Andi Pratama"
+                            class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus-ring transition-all text-sm font-medium text-slate-900">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1.5 ml-1">Alamat Email</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                            <i data-lucide="mail" class="w-4 h-4"></i>
+                        </span>
+                        <input type="email" required placeholder="nama@email.com"
+                            class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus-ring transition-all text-sm font-medium text-slate-900">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-700 mb-1.5 ml-1">Kata Sandi</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
+                            <i data-lucide="lock" class="w-4 h-4"></i>
+                        </span>
+                        <input type="password" required placeholder="••••••••"
+                            class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus-ring transition-all text-sm font-medium text-slate-900">
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-2 pt-1">
+                    <input type="checkbox" required id="terms"
+                        class="mt-1 w-3.5 h-3.5 rounded border-slate-300 text-primary focus:ring-primary">
+                    <label for="terms" class="text-[10px] font-medium text-slate-500 leading-tight">
+                        Saya setuju dengan <a href="#" class="text-primary font-bold hover:underline">Syarat &
+                            Ketentuan</a> serta <a href="#" class="text-primary font-bold hover:underline">Kebijakan
+                            Privasi</a> SewaIn.
+                    </label>
+                </div>
+
+                <button type="submit"
+                    class="w-full bg-primary text-white py-3.5 rounded-xl font-bold text-md hover:bg-opacity-90 transition-all shadow-lg shadow-blue-900/20 active:scale-[0.98] flex items-center justify-center gap-2">
+                    Daftar Sekarang
+                </button>
+            </form>
+
+            <div class="relative my-5">
+                <div class="absolute inset-0 flex items-center"><span class="w-full border-t border-slate-100"></span>
+                </div>
+                <div class="relative flex justify-center text-[10px] uppercase font-bold text-slate-400">
+                    <span class="bg-white px-3 italic">Sudah punya akun?</span>
+                </div>
+            </div>
+
+            <a href="login.html"
+                class="w-full flex items-center justify-center gap-2 border-2 border-slate-100 text-slate-600 py-3 rounded-xl font-bold hover:bg-slate-50 transition-all tracking-tight uppercase text-[10px]">
+                Kembali ke Halaman Masuk
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    lucide.createIcons();
+</script>
