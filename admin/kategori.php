@@ -64,94 +64,6 @@
 
 ?>
 
-<script>
-    //notifikasi insert
-    <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'berhasil_tambah'): ?>
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil!',
-        text: 'Kategori berhasil ditambahkan.',
-        confirmButtonColor: '#3b82f6',
-        timer: 3000,
-        timerProgressBar: true
-    }).then(() => {
-        window.history.replaceState(null, null, window.location.pathname);
-    });
-    <?php elseif (isset($_GET['pesan']) && $_GET['pesan'] == 'gagal_tambah'): ?>
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Gagal menambahkan kategori baru.',
-        confirmButtonColor: '#ef4444'
-    }).then(() => {
-        window.history.replaceState(null, null, window.location.pathname);
-    });
-
-    //notifikasi update
-    <?php elseif (isset($_GET['pesan']) && $_GET['pesan'] == 'berhasil_update'): ?>
-    Swal.fire({
-        icon: 'success',
-        title: 'Berhasil!',
-        text: 'Kategori berhasil diupdate.',
-        confirmButtonColor: '#3b82f6',
-        timer: 3000,
-        timerProgressBar: true
-    }).then(() => {
-        window.history.replaceState(null, null, window.location.pathname);
-    });
-
-    <?php elseif (isset($_GET['pesan']) && $_GET['pesan'] == 'gagal_update'): ?>
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Gagal mengupdate kategori.',
-        confirmButtonColor: '#ef4444'
-    }).then(() => {
-        window.history.replaceState(null, null, window.location.pathname);
-    });
-
-    //notifikasi hapus
-    <?php elseif (isset($_GET['pesan']) && $_GET['pesan'] == 'berhasil_hapus'): ?>
-    Swal.fire({
-        icon: 'success',
-        title: 'Terhapus!',
-        text: 'Kategori berhasil dihapus.',
-        confirmButtonColor: '#3b82f6',
-        timer: 3000,
-        timerProgressBar: true
-    }).then(() => {
-        window.history.replaceState(null, null, window.location.pathname);
-    });
-    <?php elseif (isset($_GET['pesan']) && $_GET['pesan'] == 'gagal_hapus'): ?>
-    Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Gagal menghapus kategori.',
-        confirmButtonColor: '#ef4444'
-    }).then(() => {
-        window.history.replaceState(null, null, window.location.pathname);
-    });
-    <?php endif; ?>
-
-    //konfirmasi hapus
-    function konfirmasiHapus(id) {
-        Swal.fire({
-            title: 'Apakah Anda yakin?',
-            text: "Kategori yang dihapus tidak dapat dikembalikan!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#ef4444',
-            cancelButtonColor: '#9ca3af',
-            confirmButtonText: 'Ya, Hapus!',
-            cancelButtonText: 'Batal'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                window.location.href = 'kategori.php?hapus_id=' + id;
-            }
-        })
-    }
-</script>
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -208,7 +120,7 @@
                     <div x-show="sidebarOpen" class="ml-auto flex h-2 w-2 shrink-0 rounded-full bg-brand-500"></div>
                 </a>
 
-                <a href="alat.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                <a href="alat.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-wrench text-xl shrink-0 opacity-80"></i>
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Alat Produksi</span>
                 </a>
@@ -487,7 +399,7 @@
                                     <button type="button" @click="editModalOpen = false" class="rounded-xl border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none transition-colors">
                                         Batal
                                     </button>
-                                    <button type="submit" name="update_kategori" class="rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition-all shadow-sm">
+                                    <button type="submit" name="update_kategori" class="rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-all shadow-sm">
                                         Update Kategori
                                     </button>
                                 </div>
@@ -515,6 +427,93 @@
 
     </div>
 
+    <script>
+        //notifikasi insert
+        <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'berhasil_tambah'): ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Kategori berhasil ditambahkan.',
+            confirmButtonColor: '#3b82f6',
+            timer: 3000,
+            timerProgressBar: true
+        }).then(() => {
+            window.history.replaceState(null, null, window.location.pathname);
+        });
+        <?php elseif (isset($_GET['pesan']) && $_GET['pesan'] == 'gagal_tambah'): ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Gagal menambahkan kategori baru.',
+            confirmButtonColor: '#ef4444'
+        }).then(() => {
+            window.history.replaceState(null, null, window.location.pathname);
+        });
+
+        //notifikasi update
+        <?php elseif (isset($_GET['pesan']) && $_GET['pesan'] == 'berhasil_update'): ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Berhasil!',
+            text: 'Kategori berhasil diupdate.',
+            confirmButtonColor: '#3b82f6',
+            timer: 3000,
+            timerProgressBar: true
+        }).then(() => {
+            window.history.replaceState(null, null, window.location.pathname);
+        });
+
+        <?php elseif (isset($_GET['pesan']) && $_GET['pesan'] == 'gagal_update'): ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Gagal mengupdate kategori.',
+            confirmButtonColor: '#ef4444'
+        }).then(() => {
+            window.history.replaceState(null, null, window.location.pathname);
+        });
+
+        //notifikasi hapus
+        <?php elseif (isset($_GET['pesan']) && $_GET['pesan'] == 'berhasil_hapus'): ?>
+        Swal.fire({
+            icon: 'success',
+            title: 'Terhapus!',
+            text: 'Kategori berhasil dihapus.',
+            confirmButtonColor: '#3b82f6',
+            timer: 3000,
+            timerProgressBar: true
+        }).then(() => {
+            window.history.replaceState(null, null, window.location.pathname);
+        });
+        <?php elseif (isset($_GET['pesan']) && $_GET['pesan'] == 'gagal_hapus'): ?>
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Gagal menghapus kategori.',
+            confirmButtonColor: '#ef4444'
+        }).then(() => {
+            window.history.replaceState(null, null, window.location.pathname);
+        });
+        <?php endif; ?>
+
+        //konfirmasi hapus
+        function konfirmasiHapus(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Kategori yang dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#9ca3af',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = 'kategori.php?hapus_id=' + id;
+                }
+            })
+        }
+    </script>
 
 </body>
 </html>
