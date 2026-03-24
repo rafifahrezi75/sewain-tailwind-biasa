@@ -144,13 +144,12 @@ if ($query_produk) {
                 <?php endforeach; ?>
             </nav>
 
-            <div class="p-5 bg-yellow-300 cartoon-border cartoon-shadow-sm rounded-2xl mt-auto">
-                <p class="text-[9px] font-black text-black uppercase italic">Butuh Bantuan?</p>
-                <p class="text-[10px] text-black font-bold mt-1 mb-3">Tim kami siap membantu Anda.</p>
-                <button
-                    class="w-full py-2 bg-white cartoon-border rounded-lg text-[9px] font-black text-primary cartoon-button uppercase italic">HUBUNGI
-                    ADMIN</button>
-            </div>
+                <a href="https://wa.me/6287776600292?text=*Halo%20MinSe,%20saya%20ingin%20tanya%20tentang%20alat%20di%20SewaIn*"target="_blank" class="fixed bottom-6 left-6 z-[99] group flex items-center animate-bounce">
+                     <div class="w-14 h-14 bg-[#25D366] border-[3px] border-black rounded-full shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center hover:-translate-y-1 active:translate-y-0.5 active:shadow-none transition-all duration-200">
+                        <i data-lucide="message-circle" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <span class="ml-3 bg-black text-white text-[10px] font-black px-3 py-2 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity uppercase italic whitespace-nowrap border-2 border-white shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"> Tanya Admin</span>
+                </a>
         </aside>
 
         <main class="flex-1 overflow-y-auto custom-scroll p-8 bg-[#F1F5F9]">
