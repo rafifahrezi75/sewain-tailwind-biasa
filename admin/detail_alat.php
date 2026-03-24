@@ -8,7 +8,7 @@
 
     $id = mysqli_real_escape_string($conn, $_GET['id']);
 
-    // TAMBAH SPEK
+    // tambah spek
     if (isset($_POST['simpan_spek'])) {
         $spek     = mysqli_real_escape_string($conn, $_POST['spek']);
         $iconspek = mysqli_real_escape_string($conn, $_POST['iconspek']);
@@ -18,7 +18,7 @@
         exit;
     }
 
-    // UPDATE SPEK
+    // update spek
     if (isset($_POST['update_spek'])) {
         $idspek   = mysqli_real_escape_string($conn, $_POST['idspek']);
         $spek     = mysqli_real_escape_string($conn, $_POST['spek']);
@@ -29,7 +29,7 @@
         exit;
     }
 
-    // HAPUS SPEK
+    // hapus spek
     if (isset($_GET['hapus_spek'])) {
         $idspek = mysqli_real_escape_string($conn, $_GET['hapus_spek']);
         $del = mysqli_query($conn, "DELETE FROM spesifikasi WHERE idspek='$idspek' AND idalat='$id'");
@@ -37,7 +37,7 @@
         exit;
     }
 
-    // TAMBAH FOTO DETAIL
+    // tambah foto detail
     if (isset($_POST['simpan_foto'])) {
         $file     = $_FILES['fotodetail'];
         $ekstensi = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
@@ -53,7 +53,7 @@
         exit;
     }
 
-    // HAPUS FOTO DETAIL
+    // hapus foto detail
     if (isset($_GET['hapus_foto'])) {
         $idfoto = mysqli_real_escape_string($conn, $_GET['hapus_foto']);
         $get_f  = mysqli_query($conn, "SELECT fotodetail FROM fotodetail WHERE idfotodetail='$idfoto' AND idalat='$id'");
@@ -67,8 +67,8 @@
         exit;
     }
 
-    // GET DATA ALAT
-    $query = mysqli_query($conn, "SELECT alat.*, kategori.kategori 
+    // get alat
+    $query = mysqli_query($conn, "SELECT alat.*, kategori.kategori, kategori.icon 
                                   FROM alat 
                                   LEFT JOIN kategori ON alat.idkategori = kategori.idkategori 
                                   WHERE alat.idalat = '$id'");
@@ -78,10 +78,10 @@
     }
     $data = mysqli_fetch_assoc($query);
 
-    // GET DATA SPESIFIKASI
+    // get spek
     $query_spek = mysqli_query($conn, "SELECT * FROM spesifikasi WHERE idalat = '$id' ORDER BY idspek ASC");
 
-    // GET DATA FOTO DETAIL
+    // get fotodetail
     $query_foto = mysqli_query($conn, "SELECT * FROM fotodetail WHERE idalat = '$id' ORDER BY idfotodetail ASC");
 ?>
 <!DOCTYPE html>
@@ -237,13 +237,15 @@
 
                             <!-- Info Section -->
                             <div class="md:w-7/12 p-8 lg:p-12 flex flex-col gap-8 bg-white">
-                                <div class="flex items-center justify-between">
-                                    <span class="inline-flex items-center rounded-full bg-brand-50 px-4 py-1.5 text-[10px] font-bold text-brand-600 tracking-[0.15em] uppercase border border-brand-100 shadow-sm">
-                                        <i class='bx bx-layer mr-2 text-sm'></i>
+                                <div>
+                                    <span style="display:inline-flex; align-items:center; gap:10px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:6px 14px; font-size:11px; font-weight:700; color:#1d4ed8; letter-spacing:0.1em; text-transform:uppercase; box-shadow:0 1px 2px rgba(0,0,0,0.05);">
+                                        <span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; background:#dbeafe; border-radius:50%; flex-shrink:0;">
+                                            <i class='bx <?php echo !empty($data['icon']) ? htmlspecialchars($data['icon']) : 'bx-layer'; ?>' style="font-size:13px; color:#2563eb;"></i>
+                                        </span>
                                         <?php echo htmlspecialchars($data['kategori']); ?>
                                     </span>
-                                    
                                 </div>
+
 
                                 <div class="space-y-4">
                                     <h2 class="text-4xl font-extrabold text-gray-900 tracking-tight leading-[1.1]">
@@ -474,11 +476,8 @@
                             </div>
                         </div>
 
-                    </div><!-- end x-data spek -->
+                    </div>
 
-                    <!-- ======================== -->
-                    <!-- FOTO DETAIL SECTION      -->
-                    <!-- ======================== -->
                     <div x-data="{ modalFoto: false, fotoPreview: '', fotoName: '' }">
 
                         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 overflow-hidden">

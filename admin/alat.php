@@ -18,7 +18,7 @@
     // get kategori utk dropdown
     $query_kat = mysqli_query($conn, "SELECT * FROM kategori ORDER BY kategori ASC");
 
-    // TAMBAH ALAT LOGIC
+    // tambah alat
     if (isset($_POST['simpan_alat'])) {
         $nama_alat = mysqli_real_escape_string($conn, $_POST['nama_alat']);
         $idkategori = mysqli_real_escape_string($conn, $_POST['idkategori']);
@@ -26,7 +26,6 @@
         $harga_sewa = (int)$_POST['harga_sewa'];
         $deskripsi = mysqli_real_escape_string($conn, $_POST['deskripsi']);
         
-        // Cek status otomatis
         $status = ($stok > 0) ? 'tersedia' : 'kosong';
 
         $nama_file = "";
@@ -57,7 +56,7 @@
         }
     }
 
-    // UPDATE ALAT LOGIC
+    // update alat
     if (isset($_POST['update_alat'])) {
         $id_edit = mysqli_real_escape_string($conn, $_POST['idalat_edit']);
         $nama_alat = mysqli_real_escape_string($conn, $_POST['nama_alat']);
@@ -66,7 +65,6 @@
         $harga_sewa = (int)$_POST['harga_sewa'];
         $deskripsi = mysqli_real_escape_string($conn, $_POST['deskripsi']);
         
-        // Cek status otomatis
         $status = ($stok > 0) ? 'tersedia' : 'kosong';
 
         if (isset($_FILES['gambar']['name']) && $_FILES['gambar']['name'] != '') {
@@ -82,7 +80,7 @@
                     $random_name = time() . '-' . uniqid() . '.' . $ekstensi;
                     move_uploaded_file($file_tmp, '../uploads/'.$random_name);
 
-                    // Hapus gambar lama
+                    // hapus gambar lama
                     $get_gambar = mysqli_query($conn, "SELECT gambar FROM alat WHERE idalat = '$id_edit'");
                     $data_gambar = mysqli_fetch_array($get_gambar);
                     if ($data_gambar && !empty($data_gambar['gambar'])) {
@@ -96,7 +94,7 @@
                 }
             }
         } else {
-            // Jika tidak ada upload gambar baru
+            // jika tidak ada upload gambar baru
             $update = mysqli_query($conn, "UPDATE alat SET idkategori='$idkategori', nama_alat='$nama_alat', harga_sewa='$harga_sewa', stok='$stok', status='$status', deskripsi='$deskripsi' WHERE idalat='$id_edit'");
         }
         
@@ -109,11 +107,11 @@
         }
     }
 
-    // HAPUS ALAT LOGIC
+    // hapus alat
     if (isset($_GET['hapus_id'])) {
         $id_hapus = mysqli_real_escape_string($conn, $_GET['hapus_id']);
         
-        // Hapus file gambar di uploads jika ada
+        // hapus file gambar di uploads jika ada
         $get_gambar = mysqli_query($conn, "SELECT gambar FROM alat WHERE idalat = '$id_hapus'");
         $data_gambar = mysqli_fetch_array($get_gambar);
         if ($data_gambar && !empty($data_gambar['gambar'])) {
