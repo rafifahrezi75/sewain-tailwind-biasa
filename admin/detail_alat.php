@@ -418,7 +418,7 @@
                                     <div>
                                         <label class="mb-1.5 block text-sm font-medium text-gray-700">Icon Boxicons <span class="text-gray-400 font-normal">(opsional)</span></label>
                                         <input type="text" name="iconspek" placeholder="Contoh: bx-bolt-circle, bx-chip, bx-cog" class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
-                                        <p class="mt-1 text-[11px] text-gray-400">Cari nama icon di <a href="https://boxicons.com" target="_blank" class="text-brand-500 underline">boxicons.com</a></p>
+                                        <p class="mt-1 text-[11px] text-gray-400">Cari nama icon di <a href="https://boxicons.com/icons?free=true" target="_blank" class="text-brand-500 underline">boxicons.com</a></p>
                                     </div>
                                     <div>
                                         <label class="mb-1.5 block text-sm font-medium text-gray-700">Satuan / Nilai</label>
@@ -460,7 +460,7 @@
                                     <div>
                                         <label class="mb-1.5 block text-sm font-medium text-gray-700">Icon Boxicons <span class="text-gray-400 font-normal">(opsional)</span></label>
                                         <input type="text" name="iconspek" :value="editData.iconspek" placeholder="Contoh: bx-bolt-circle, bx-chip, bx-cog" class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
-                                        <p class="mt-1 text-[11px] text-gray-400">Cari nama icon di <a href="https://boxicons.com" target="_blank" class="text-brand-500 underline">boxicons.com</a></p>
+                                        <p class="mt-1 text-[11px] text-gray-400">Cari nama icon di <a href="https://boxicons.com/icons?free=true" target="_blank" class="text-brand-500 underline">boxicons.com</a></p>
                                     </div>
                                     <div>
                                         <label class="mb-1.5 block text-sm font-medium text-gray-700">Satuan / Nilai</label>
@@ -499,26 +499,27 @@
                                 <?php if (mysqli_num_rows($query_foto) > 0): ?>
                                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                                     <?php while ($foto = mysqli_fetch_assoc($query_foto)): ?>
-                                    <div class="group relative overflow-hidden rounded-2xl bg-gray-100 aspect-square shadow-sm ring-1 ring-gray-200/50">
-                                        <img src="../uploads/<?php echo htmlspecialchars($foto['fotodetail']); ?>" 
-                                             alt="Foto Detail" 
-                                             class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
-                                        <!-- Overlay on hover -->
-                                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-3">
-                                            <a href="../uploads/<?php echo htmlspecialchars($foto['fotodetail']); ?>" target="_blank" 
-                                               class="rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 p-2 text-white hover:bg-white/30 transition-colors" title="Lihat Asli">
-                                                <i class='bx bx-expand-alt text-base'></i>
-                                            </a>
-                                            <button type="button" onclick="hapusFoto('<?php echo $foto['idfotodetail']; ?>')" 
-                                                    class="rounded-lg bg-red-500/80 backdrop-blur-sm border border-red-400/30 p-2 text-white hover:bg-red-600 transition-colors" title="Hapus">
-                                                <i class='bx bx-trash text-base'></i>
-                                            </button>
-                                        </div>
-                                        <!-- Photo number badge -->
-                                        <span class="absolute top-2 right-2 h-6 w-6 flex items-center justify-center rounded-lg bg-black/30 backdrop-blur-sm text-white text-[10px] font-bold">
-                                            <?php echo $foto['idfotodetail']; ?>
-                                        </span>
+                                    <div style="position:relative; overflow:hidden; border-radius:1rem; background:#f3f4f6; aspect-ratio:1/1; box-shadow:0 1px 3px rgba(0,0,0,.12);">
+                                        <img src="../uploads/<?php echo htmlspecialchars($foto['fotodetail']); ?>"
+                                             alt="Foto Detail"
+                                             style="width:100%; height:100%; object-fit:cover; display:block;">
+
+                                        <!-- Tombol Lihat — pojok kiri atas -->
+                                        <a href="../uploads/<?php echo htmlspecialchars($foto['fotodetail']); ?>" target="_blank"
+                                           title="Lihat Asli"
+                                           style="position:absolute; top:8px; left:8px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.55); border-radius:8px; color:#fff; text-decoration:none; z-index:5;">
+                                            <i class='bx bx-expand-alt' style="font-size:14px;"></i>
+                                        </a>
+
+                                        <!-- Tombol Hapus — pojok kanan atas -->
+                                        <button type="button" onclick="hapusFoto('<?php echo $foto['idfotodetail']; ?>')"
+                                                title="Hapus Foto"
+                                                style="position:absolute; top:8px; right:8px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; background:#ef4444; border:none; border-radius:8px; color:#fff; cursor:pointer; z-index:5;">
+                                            <i class='bx bx-trash' style="font-size:14px;"></i>
+                                        </button>
                                     </div>
+
+
                                     <?php endwhile; ?>
                                 </div>
                                 <?php else: ?>
@@ -531,9 +532,6 @@
                             </div>
                         </div>
 
-                        <!-- ==================== -->
-                        <!-- MODAL TAMBAH FOTO    -->
-                        <!-- ==================== -->
                         <div x-show="modalFoto"
                              class="fixed inset-0 z-60 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
                              x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -610,40 +608,51 @@
     </div>
 
     <script>
-        // Notifikasi
-        <?php if (isset($_GET['pesan'])): ?>
-        <?php $pesan = $_GET['pesan']; ?>
-        <?php if ($pesan == 'berhasil_tambah_spek'): ?>
-        Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Spesifikasi berhasil ditambahkan.', confirmButtonColor: '#3b82f6', timer: 2500, timerProgressBar: true })
-            .then(() => window.history.replaceState(null, null, window.location.pathname + '?id=<?php echo $id; ?>'));
-        <?php elseif ($pesan == 'gagal_tambah_spek'): ?>
-        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Gagal menambahkan spesifikasi.', confirmButtonColor: '#ef4444' })
-            .then(() => window.history.replaceState(null, null, window.location.pathname + '?id=<?php echo $id; ?>'));
-        <?php elseif ($pesan == 'berhasil_update_spek'): ?>
-        Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Spesifikasi berhasil diperbarui.', confirmButtonColor: '#3b82f6', timer: 2500, timerProgressBar: true })
-            .then(() => window.history.replaceState(null, null, window.location.pathname + '?id=<?php echo $id; ?>'));
-        <?php elseif ($pesan == 'gagal_update_spek'): ?>
-        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Gagal memperbarui spesifikasi.', confirmButtonColor: '#ef4444' })
-            .then(() => window.history.replaceState(null, null, window.location.pathname + '?id=<?php echo $id; ?>'));
-        <?php elseif ($pesan == 'berhasil_hapus_spek'): ?>
-        Swal.fire({ icon: 'success', title: 'Terhapus!', text: 'Spesifikasi berhasil dihapus.', confirmButtonColor: '#3b82f6', timer: 2500, timerProgressBar: true })
-            .then(() => window.history.replaceState(null, null, window.location.pathname + '?id=<?php echo $id; ?>'));
-        <?php elseif ($pesan == 'gagal_hapus_spek'): ?>
-        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Gagal menghapus spesifikasi.', confirmButtonColor: '#ef4444' })
-            .then(() => window.history.replaceState(null, null, window.location.pathname + '?id=<?php echo $id; ?>'));
-        <?php elseif ($pesan == 'berhasil_tambah_foto'): ?>
-        Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Foto berhasil diunggah.', confirmButtonColor: '#3b82f6', timer: 2500, timerProgressBar: true })
-            .then(() => window.history.replaceState(null, null, window.location.pathname + '?id=<?php echo $id; ?>'));
-        <?php elseif ($pesan == 'gagal_tambah_foto'): ?>
-        Swal.fire({ icon: 'error', title: 'Gagal!', text: 'Foto gagal diunggah. Pastikan format dan ukuran file sesuai (maks 3MB).', confirmButtonColor: '#ef4444' })
-            .then(() => window.history.replaceState(null, null, window.location.pathname + '?id=<?php echo $id; ?>'));
-        <?php elseif ($pesan == 'berhasil_hapus_foto'): ?>
-        Swal.fire({ icon: 'success', title: 'Terhapus!', text: 'Foto berhasil dihapus.', confirmButtonColor: '#3b82f6', timer: 2500, timerProgressBar: true })
-            .then(() => window.history.replaceState(null, null, window.location.pathname + '?id=<?php echo $id; ?>'));
-        <?php elseif ($pesan == 'gagal_hapus_foto'): ?>
-        Swal.fire({ icon: 'error', title: 'Oops...', text: 'Gagal menghapus foto.', confirmButtonColor: '#ef4444' })
-            .then(() => window.history.replaceState(null, null, window.location.pathname + '?id=<?php echo $id; ?>'));
-        <?php endif; ?>
+        // Notifikasi SweetAlert
+        <?php if (isset($_GET['pesan'])): 
+            $pesan = $_GET['pesan'];
+            $redirectUrl = "window.location.pathname + '?id=$id'";
+        ?>
+            <?php if ($pesan == 'berhasil_tambah_spek'): ?>
+                Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Spesifikasi berhasil ditambahkan.', confirmButtonColor: '#3b82f6', timer: 3000, timerProgressBar: true })
+                    .then(() => window.history.replaceState(null, null, <?php echo $redirectUrl; ?>));
+
+            <?php elseif ($pesan == 'gagal_tambah_spek'): ?>
+                Swal.fire({ icon: 'error', title: 'Oops...', text: 'Gagal menambahkan spesifikasi.', confirmButtonColor: '#ef4444' })
+                    .then(() => window.history.replaceState(null, null, <?php echo $redirectUrl; ?>));
+
+            <?php elseif ($pesan == 'berhasil_update_spek'): ?>
+                Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Spesifikasi berhasil diperbarui.', confirmButtonColor: '#3b82f6', timer: 3000, timerProgressBar: true })
+                    .then(() => window.history.replaceState(null, null, <?php echo $redirectUrl; ?>));
+
+            <?php elseif ($pesan == 'gagal_update_spek'): ?>
+                Swal.fire({ icon: 'error', title: 'Oops...', text: 'Gagal memperbarui spesifikasi.', confirmButtonColor: '#ef4444' })
+                    .then(() => window.history.replaceState(null, null, <?php echo $redirectUrl; ?>));
+
+            <?php elseif ($pesan == 'berhasil_hapus_spek'): ?>
+                Swal.fire({ icon: 'success', title: 'Terhapus!', text: 'Spesifikasi berhasil dihapus.', confirmButtonColor: '#3b82f6', timer: 3000, timerProgressBar: true })
+                    .then(() => window.history.replaceState(null, null, <?php echo $redirectUrl; ?>));
+
+            <?php elseif ($pesan == 'gagal_hapus_spek'): ?>
+                Swal.fire({ icon: 'error', title: 'Oops...', text: 'Gagal menghapus spesifikasi.', confirmButtonColor: '#ef4444' })
+                    .then(() => window.history.replaceState(null, null, <?php echo $redirectUrl; ?>));
+
+            <?php elseif ($pesan == 'berhasil_tambah_foto'): ?>
+                Swal.fire({ icon: 'success', title: 'Berhasil!', text: 'Foto berhasil diunggah.', confirmButtonColor: '#3b82f6', timer: 3000, timerProgressBar: true })
+                    .then(() => window.history.replaceState(null, null, <?php echo $redirectUrl; ?>));
+
+            <?php elseif ($pesan == 'gagal_tambah_foto'): ?>
+                Swal.fire({ icon: 'error', title: 'Gagal!', text: 'Foto gagal diunggah. Pastikan format dan ukuran file sesuai (maks 3MB).', confirmButtonColor: '#ef4444' })
+                    .then(() => window.history.replaceState(null, null, <?php echo $redirectUrl; ?>));
+
+            <?php elseif ($pesan == 'berhasil_hapus_foto'): ?>
+                Swal.fire({ icon: 'success', title: 'Terhapus!', text: 'Foto berhasil dihapus.', confirmButtonColor: '#3b82f6', timer: 3000, timerProgressBar: true })
+                    .then(() => window.history.replaceState(null, null, <?php echo $redirectUrl; ?>));
+
+            <?php elseif ($pesan == 'gagal_hapus_foto'): ?>
+                Swal.fire({ icon: 'error', title: 'Oops...', text: 'Gagal menghapus foto.', confirmButtonColor: '#ef4444' })
+                    .then(() => window.history.replaceState(null, null, <?php echo $redirectUrl; ?>));
+            <?php endif; ?>
         <?php endif; ?>
 
         // Konfirmasi Hapus Spek
