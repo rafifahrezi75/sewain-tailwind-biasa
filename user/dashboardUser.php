@@ -130,7 +130,7 @@
                                 data-lucide="chevron-down" class="w-4 h-4"></i></div>
                         <div
                             class="dropdown-menu absolute hidden left-0 mt-0 w-56 bg-white cartoon-border cartoon-shadow rounded-2xl overflow-hidden pt-2">
-                            <a href="alatUser.html"
+                            <a href="alatUser.php"
                                 class="block px-5 py-4 hover:bg-yellow-50 text-gray-700 transition flex items-center gap-3 border-b-2 border-black">
                                 <div class="p-2 bg-orange-100 cartoon-border rounded-lg"><i data-lucide="layout-grid"
                                         class="w-4 h-4 text-orange-500"></i></div>
@@ -186,7 +186,7 @@
                     Temukan Alat Produksi Yang Anda Butuhkan dan Sewa Dengan Mudah Dalam Satu Platform.
                 </p>
                 <div class="flex flex-wrap gap-4">
-                    <a href="alatUser.html"
+                    <a href="alatUser.php"
                         class="bg-primary text-white px-10 py-5 rounded-2xl font-black cartoon-border cartoon-shadow cartoon-button text-sm uppercase tracking-widest transition-all">Mulai
                         Pinjam</a>
                 </div>
@@ -363,7 +363,7 @@
                     <h2 class="text-3xl font-black text-slate-900 uppercase italic">Katalog Alat Produksi</h2>
                     <div class="h-1.5 w-16 bg-aksen cartoon-border rounded-full mt-2"></div>
                 </div>
-                <a href="alatuser.html"
+                <a href="alatUser.php"
                     class="group flex items-center gap-2 px-4 py-2 rounded-xl bg-yellow-300 cartoon-border cartoon-shadow-sm cartoon-button text-black text-[10px] font-black uppercase italic transition-all">
                     Lihat Semua Alat <i data-lucide="arrow-right"
                         class="w-3 h-3 group-hover:translate-x-1 transition-transform"></i>

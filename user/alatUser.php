@@ -1,3 +1,43 @@
+<?php
+include '../config.php';
+
+$kat_filter = isset($_GET['kategori']) ? $_GET['kategori'] : 'Semua';
+
+// get kategori
+$query_kategori = mysqli_query($conn, "SELECT * FROM kategori");
+$kategori_array = [];
+if ($query_kategori) {
+    while ($row = mysqli_fetch_assoc($query_kategori)) {
+        $kategori_array[] = $row['kategori'];
+    }
+}
+
+// get produk
+$query_str = "SELECT alat.*, kategori.kategori 
+              FROM alat 
+              LEFT JOIN kategori ON alat.idkategori = kategori.idkategori 
+              WHERE alat.status = 'tersedia'";
+
+if ($kat_filter !== 'Semua') {
+    $safe_kat = mysqli_real_escape_string($conn, $kat_filter);
+    $query_str .= " AND kategori.kategori = '$safe_kat'";
+}
+
+$query_produk = mysqli_query($conn, $query_str);
+$produk_array = [];
+if ($query_produk) {
+    while ($row = mysqli_fetch_assoc($query_produk)) {
+        $produk_array[] = [
+            'id' => isset($row['idalat']) ? (int)$row['idalat'] : (isset($row['id_alat']) ? (int)$row['id_alat'] : (int)$row['id']),
+            'nama' => $row['nama_alat'],
+            'harga' => (int)$row['harga_sewa'],
+            'kategori' => $row['kategori'] ? $row['kategori'] : 'Umum',
+            'gambar' => $row['gambar'] ? $row['gambar'] : '',
+            'icon' => 'package'
+        ];
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -67,7 +107,7 @@
 
     <nav class="flex-none bg-white border-b-4 border-black z-50">
         <div class="max-w-[1600px] mx-auto px-6 h-16 flex items-center justify-between">
-            <a href="dashboardUser.html" class="flex items-center gap-2">
+            <a href="dashboardUser.php" class="flex items-center gap-2">
                 <div
                     class="w-8 h-8 bg-primary cartoon-border rounded-lg flex items-center justify-center cartoon-shadow-sm">
                     <i data-lucide="layers" class="text-white w-4 h-4"></i>
@@ -76,9 +116,9 @@
                         class="text-primary">In</span></span>
             </a>
             <div class="flex items-center gap-6">
-                <a href="dashboardUser.html"
+                <a href="dashboardUser.php"
                     class="text-xs font-black text-slate-500 hover:text-primary transition-all uppercase italic">Beranda</a>
-                <a href="login.html">
+                <a href="../login.html" id="authContainer">
                     <div
                         class="w-9 h-9 rounded-xl bg-white cartoon-border cartoon-shadow-sm flex items-center justify-center text-slate-900">
                         <i data-lucide="user" class="w-5 h-5"></i>
@@ -92,26 +132,16 @@
         <aside class="w-72 bg-white border-r-4 border-black p-6 hidden lg:flex flex-col">
             <h3 class="text-[18px] font-black text-slate-400 uppercase tracking-widest mb-6 italic">Kategori Alat</h3>
             <nav class="space-y-3 flex-1" id="categoryNav">
-                <button onclick="filterKategori('Semua', this)"
-                    class="category-btn active w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
+                <a href="alatUser.php"
+                    class="category-btn <?= $kat_filter === 'Semua' ? 'active' : '' ?> w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
                     Semua Alat
-                </button>
-                <button onclick="filterKategori('Pengolah Makanan', this)"
-                    class="category-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
-                    Pengolah Makanan
-                </button>
-                <button onclick="filterKategori('Bakery', this)"
-                    class="category-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
-                    Bakery & Kue
-                </button>
-                <button onclick="filterKategori('Alat Mesin', this)"
-                    class="category-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
-                    Alat Mesin
-                </button>
-                <button onclick="filterKategori('Kebun', this)"
-                    class="category-btn w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
-                    Pertanian & Kebun
-                </button>
+                </a>
+                <?php foreach ($kategori_array as $kat): ?>
+                <a href="alatUser.php?kategori=<?= urlencode($kat) ?>"
+                    class="category-btn <?= $kat_filter === $kat ? 'active' : '' ?> w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-black transition-all border-2 border-transparent hover:border-black uppercase italic text-left">
+                    <?= htmlspecialchars($kat) ?>
+                </a>
+                <?php endforeach; ?>
             </nav>
 
             <div class="p-5 bg-yellow-300 cartoon-border cartoon-shadow-sm rounded-2xl mt-auto">
@@ -129,13 +159,45 @@
                     <div>
                         <h1 id="kategoriTitle"
                             class="text-3xl font-black text-slate-900 tracking-tight uppercase italic bg-yellow-300 inline-block px-2 cartoon-border">
-                            Semua Alat</h1>
+                            <?= htmlspecialchars($kat_filter === 'Semua' ? 'Semua Alat' : $kat_filter) ?></h1>
                         <p class="text-slate-500 text-xs font-black mt-2 uppercase italic">Menampilkan alat-alat pilihan
                             terbaik</p>
                     </div>
                 </div>
 
                 <div id="produkGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-24">
+                    <?php if (count($produk_array) === 0): ?>
+                        <div class="col-span-full py-16 text-center text-slate-400 font-black uppercase italic">Tidak ada produk di kategori ini.</div>
+                    <?php else: ?>
+                        <?php foreach ($produk_array as $p): ?>
+                            <div class="bg-white rounded-[2rem] p-5 cartoon-border cartoon-shadow hover:translate-y-[-4px] transition-all duration-300 group">
+                                <div class="bg-slate-100 cartoon-border rounded-[1.5rem] aspect-square mb-4 flex items-center justify-center relative overflow-hidden">
+                                    <?php if ($p['gambar']): ?>
+                                        <img src="../uploads/<?= htmlspecialchars($p['gambar']) ?>" alt="<?= htmlspecialchars($p['nama']) ?>" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                                    <?php else: ?>
+                                        <i data-lucide="<?= htmlspecialchars($p['icon'] ?? 'package') ?>" class="text-slate-300 w-16 h-16 group-hover:scale-110 transition duration-500"></i>
+                                    <?php endif; ?>
+                                    <div class="absolute top-3 left-3 bg-aksen text-white text-[8px] font-black px-3 py-1 cartoon-border rounded-full uppercase">Tersedia</div>
+                                </div>
+                                <div class="px-1">
+                                    <p class="text-aksen font-black text-[10px] uppercase tracking-tighter italic"><?= htmlspecialchars($p['kategori']) ?></p>
+                                    <h3 class="font-black text-sm text-slate-900 truncate uppercase italic"><?= htmlspecialchars($p['nama']) ?></h3>
+                                    <div class="flex items-baseline gap-1 mt-1 mb-4">
+                                        <span class="text-xl font-black text-primary italic">Rp<?= ($p['harga'] / 1000) ?>k</span>
+                                        <span class="text-slate-400 font-black text-[10px] uppercase">/hari</span>
+                                    </div>
+                                    <div class="flex gap-3">
+                                        <button onclick="openQtyModal(<?= $p['id'] ?>, '<?= htmlspecialchars(addslashes($p['nama'])) ?>', <?= $p['harga'] ?>)" class="flex-none bg-yellow-300 text-black p-3 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button transition-all">
+                                            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                                        </button>
+                                        <a href="detailAlat.html?id=<?= $p['id'] ?>" class="flex-1 bg-primary text-white py-3 rounded-xl font-black text-[9px] flex items-center justify-center gap-2 cartoon-border cartoon-shadow-sm cartoon-button uppercase italic tracking-widest">
+                                            DETAIL
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
             </div>
         </main>
@@ -175,72 +237,8 @@
     </div>
 
     <script>
-        // DATA SEMUA PRODUK
-        const dataProduk = [
-            { id: 1, nama: 'Mixer Planeteri 10L', harga: 75000, kategori: 'Bakery', icon: 'chef-hat' },
-            { id: 2, nama: 'Oven Deck Otomatis', harga: 120000, kategori: 'Bakery', icon: 'flame' },
-            { id: 3, nama: 'Penggiling Daging', harga: 55000, kategori: 'Pengolah Makanan', icon: 'utensils' },
-            { id: 4, nama: 'Mesin Bor Beton', harga: 45000, kategori: 'Alat Mesin', icon: 'wrench' },
-            { id: 5, nama: 'Traktor Mini', harga: 250000, kategori: 'Kebun', icon: 'tractor' },
-            { id: 6, nama: 'Mesin Jahit Industri', harga: 85000, kategori: 'Alat Mesin', icon: 'scissors' },
-            { id: 7, nama: 'Pemotong Keripik', harga: 30000, kategori: 'Pengolah Makanan', icon: 'slice' },
-            { id: 8, nama: 'Vacuum Sealer', harga: 40000, kategori: 'Pengolah Makanan', icon: 'package' }
-        ];
-
         let currentSelectedAlat = null;
 
-        // FUNGSI RENDER PRODUK KE GRID
-        function renderProduk(filter = 'Semua') {
-            const grid = document.getElementById('produkGrid');
-            grid.innerHTML = '';
-
-            const produkFiltered = filter === 'Semua'
-                ? dataProduk
-                : dataProduk.filter(p => p.kategori === filter);
-
-            produkFiltered.forEach(p => {
-                grid.innerHTML += `
-                    <div class="bg-white rounded-[2rem] p-5 cartoon-border cartoon-shadow hover:translate-y-[-4px] transition-all duration-300 group">
-                        <div class="bg-slate-100 cartoon-border rounded-[1.5rem] aspect-square mb-4 flex items-center justify-center relative overflow-hidden">
-                            <i data-lucide="${p.icon || 'package'}" class="text-slate-300 w-16 h-16 group-hover:scale-110 transition duration-500"></i>
-                            <div class="absolute top-3 left-3 bg-aksen text-white text-[8px] font-black px-3 py-1 cartoon-border rounded-full uppercase">Tersedia</div>
-                        </div>
-                        <div class="px-1">
-                            <p class="text-aksen font-black text-[10px] uppercase tracking-tighter italic">${p.kategori}</p>
-                            <h3 class="font-black text-sm text-slate-900 truncate uppercase italic">${p.nama}</h3>
-                            <div class="flex items-baseline gap-1 mt-1 mb-4">
-                                <span class="text-xl font-black text-primary italic">Rp${(p.harga / 1000)}k</span>
-                                <span class="text-slate-400 font-black text-[10px] uppercase">/hari</span>
-                            </div>
-                            <div class="flex gap-3">
-                                <button onclick="openQtyModal(${p.id}, '${p.nama}', ${p.harga})" class="flex-none bg-yellow-300 text-black p-3 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button transition-all">
-                                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                                </button>
-                                <a href="detailAlat.html?id=${p.id}" class="flex-1 bg-primary text-white py-3 rounded-xl font-black text-[9px] flex items-center justify-center gap-2 cartoon-border cartoon-shadow-sm cartoon-button uppercase italic tracking-widest">
-                                    DETAIL
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-            lucide.createIcons();
-        }
-
-        // FUNGSI FILTER KATEGORI
-        function filterKategori(kat, btn) {
-            // Update Title
-            document.getElementById('kategoriTitle').innerText = kat === 'Semua' ? 'Semua Alat' : kat;
-
-            // Update Active Class Button
-            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            // Render Ulang
-            renderProduk(kat);
-        }
-
-        // LOGIKA MODAL & KERANJANG
         function openQtyModal(id, nama, harga) {
             currentSelectedAlat = { id, nama, harga };
             document.getElementById('qtyModalTitle').innerText = "Sewa " + nama;
@@ -272,7 +270,6 @@
             localStorage.setItem('keranjangSewaIn', JSON.stringify(keranjang));
             updateBadge();
             closeQtyModal();
-            // Notifikasi ala cartoon
             const toast = document.createElement('div');
             toast.className = "fixed top-5 left-1/2 -translate-x-1/2 z-[200] bg-yellow-300 cartoon-border cartoon-shadow px-6 py-3 font-black uppercase italic text-xs animate-bounce";
             toast.innerText = `🚀 ${qty} ${currentSelectedAlat.nama} Berhasil Masuk Keranjang!`;
@@ -293,21 +290,19 @@
         document.getElementById('confirmAddBtn').onclick = konfirmasiTambah;
 
         window.onload = () => {
-            // Setiap kali masuk ke katalog, hapus mode "langsung" 
-            // agar kalau klik icon keranjang, isinya kembali normal.
             localStorage.removeItem('mode_checkout');
             localStorage.removeItem('checkout_cepat');
 
-            renderProduk(); // Fungsi render produk kamu
-            updateBadge();  // Fungsi update jumlah keranjang kamu
+            updateNavbarProfil();
+            updateBadge();
+            lucide.createIcons();
         };
 
         function updateNavbarProfil() {
             const userData = JSON.parse(localStorage.getItem('userSewaIn'));
-            const authContainer = document.getElementById('authContainer'); // ID div tempat tombol login/profil
+            const authContainer = document.getElementById('authContainer');
 
             if (userData && userData.isLogin) {
-                // Jika sudah login, tampilkan tombol Profil
                 authContainer.innerHTML = `
             <div class="flex items-center gap-3 bg-white p-1 pr-4 rounded-full border-2 border-slate-100 shadow-sm">
                 <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white">
@@ -321,8 +316,8 @@
                 </button>
             </div>
         `;
+                authContainer.href = "javascript:void(0)";
             }
-            lucide.createIcons();
         }
 
         function logout() {
