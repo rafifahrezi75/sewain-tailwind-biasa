@@ -190,7 +190,7 @@ if ($query_produk) {
                                         <button onclick="openQtyModal(<?= $p['id'] ?>, '<?= htmlspecialchars(addslashes($p['nama'])) ?>', <?= $p['harga'] ?>)" class="flex-none bg-yellow-300 text-black p-3 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button transition-all">
                                             <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                                         </button>
-                                        <a href="detailAlat.html?id=<?= $p['id'] ?>" class="flex-1 bg-primary text-white py-3 rounded-xl font-black text-[9px] flex items-center justify-center gap-2 cartoon-border cartoon-shadow-sm cartoon-button uppercase italic tracking-widest">
+                                        <a href="detailAlat.php?id=<?= $p['id'] ?>" class="flex-1 bg-primary text-white py-3 rounded-xl font-black text-[9px] flex items-center justify-center gap-2 cartoon-border cartoon-shadow-sm cartoon-button uppercase italic tracking-widest">
                                             DETAIL
                                         </a>
                                     </div>
