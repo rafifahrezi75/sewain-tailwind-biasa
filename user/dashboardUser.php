@@ -161,10 +161,9 @@
                             </a>
                         </div>
                     </div>
-                    <a href="../login.html"
-                        class="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button transition-all uppercase text-xs font-black">
+                        <button onclick="toggleProfile()" class="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button transition-all uppercase text-xs font-black">
                         <i data-lucide="user" class="w-4 h-4"></i> Profil
-                    </a>
+                        </button>
                 </div>
             </div>
         </div>
@@ -406,7 +405,7 @@
                                 ?></span>
                                 <span class="text-slate-400 text-[10px] font-bold">/ hari</span>
                             </div>
-                            <a href="../login.html"
+                            <a href="../login.php"
                                 class="w-full bg-primary text-white py-2.5 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button font-black text-[10px] text-center block uppercase italic">PINJAM
                                 ALAT</a>
                         </div>
@@ -535,6 +534,57 @@
         </div>
     </footer>
 
+    <div id="profile-overlay" class="fixed inset-0 bg-black/50 z-[60] hidden transition-opacity duration-300 opacity-0" onclick="toggleProfile()"></div>
+
+<div id="profile-panel" class="fixed top-0 right-0 h-full w-full sm:w-1/3 lg:w-1/4 bg-white z-[70] border-l-4 border-black translate-x-full transition-transform duration-500 ease-in-out flex flex-col">
+    <div class="p-6 border-b-4 border-black bg-yellow-300 flex justify-between items-center">
+        <h2 class="text-xl font-black uppercase italic italic leading-none">Profil Saya</h2>
+        <button onclick="toggleProfile()" class="w-10 h-10 bg-white cartoon-border rounded-xl flex items-center justify-center cartoon-shadow-sm active:translate-y-1">
+            <i data-lucide="x" class="w-6 h-6 text-black"></i>
+        </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-6 space-y-6">
+        <div class="text-center space-y-3">
+            <div class="w-24 h-24 bg-primary cartoon-border rounded-3xl mx-auto flex items-center justify-center cartoon-shadow">
+                <i data-lucide="user" class="text-white w-12 h-12"></i>
+            </div>
+            <div>
+                <h3 class="font-black text-lg uppercase italic">Fahis Prasetya</h3>
+                <span class="text-[10px] font-bold bg-aksen cartoon-border px-3 py-1 rounded-full uppercase">Aktif</span>
+            </div>
+        </div>
+
+        <hr class="border-2 border-black border-dashed">
+
+        <div class="space-y-4">
+            <div class="space-y-1">
+                <span class="text-[10px] font-black text-gray-400 uppercase italic">Email</span>
+                <p class="font-bold text-sm">fahisprasetya023@gmail.com</p>
+            </div>
+            <div class="space-y-1">
+                <span class="text-[10px] font-black text-gray-400 uppercase italic">No. Telepon</span>
+                <p class="font-bold text-sm">+62 877-7660-0292</p>
+            </div>
+        </div>
+
+        <div class="pt-4 space-y-3">
+            <a href="pengaturan.php" class="flex items-center gap-3 p-4 bg-slate-100 cartoon-border rounded-2xl font-black text-xs uppercase italic hover:bg-yellow-50 transition-colors">
+                <i data-lucide="history" class="w-4 h-4 text-primary"></i> Pengaturan Akun
+            </a>
+            <a href="riwayat.php" class="flex items-center gap-3 p-4 bg-slate-100 cartoon-border rounded-2xl font-black text-xs uppercase italic hover:bg-yellow-50 transition-colors">
+                <i data-lucide="settings" class="w-4 h-4 text-gray-600"></i> Riwayat Sewa
+            </a>
+        </div>
+    </div>
+
+    <div class="p-6 border-t-4 border-black">
+        <a href="../logout.php" class="w-full bg-red-500 text-white py-4 rounded-2xl cartoon-border cartoon-shadow-sm font-black text-center block uppercase italic hover:bg-red-600 transition-colors">
+            Keluar
+        </a>
+    </div>
+</div>
+
     <script>
         lucide.createIcons();
 
@@ -577,6 +627,27 @@
                 nav.classList.remove('py-2', 'bg-white/95');
             }
         });
+
+        function toggleProfile() {
+        const panel = document.getElementById('profile-panel');
+        const overlay = document.getElementById('profile-overlay');
+        
+        // Jika panel sedang tertutup
+        if (panel.classList.contains('translate-x-full')) {
+            panel.classList.remove('translate-x-full');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.add('opacity-100'), 10);
+            document.body.style.overflow = 'hidden'; // Kunci scroll layar utama
+        } else {
+            // Jika panel sedang terbuka
+            panel.classList.add('translate-x-full');
+            overlay.classList.remove('opacity-100');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                document.body.style.overflow = 'auto'; // Aktifkan scroll kembali
+            }, 300);
+        }
+        }
 
     </script>
 </body>

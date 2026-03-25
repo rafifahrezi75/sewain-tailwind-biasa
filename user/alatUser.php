@@ -118,7 +118,7 @@ if ($query_produk) {
             <div class="flex items-center gap-6">
                 <a href="dashboardUser.php"
                     class="text-xs font-black text-slate-500 hover:text-primary transition-all uppercase italic">Beranda</a>
-                <a href="../login.html" id="authContainer">
+                <a href="../login.php" id="authContainer">
                     <div
                         class="w-9 h-9 rounded-xl bg-white cartoon-border cartoon-shadow-sm flex items-center justify-center text-slate-900">
                         <i data-lucide="user" class="w-5 h-5"></i>
