@@ -137,7 +137,9 @@ if ($alatdb) {
                 <span>Kembali</span>
             </a>
             <span class="text-sm font-black text-black tracking-[0.2em] uppercase italic bg-white px-4 py-1 cartoon-border rounded-xl cartoon-shadow-sm">Detail Produk</span>
-            <div class="w-8"></div>
+            <div class="flex items-center gap-3">
+                <div id="authContainer"></div>
+            </div>
         </div>
     </nav>
 
@@ -231,6 +233,57 @@ if ($alatdb) {
         </div>
     </div>
 </main>
+
+    <div id="profile-overlay" class="fixed inset-0 bg-black/50 z-[120] hidden transition-opacity duration-300 opacity-0" onclick="toggleProfile()"></div>
+
+    <div id="profile-panel" class="fixed top-0 right-0 h-full w-full sm:w-1/3 lg:w-1/4 bg-white z-[130] border-l-4 border-black translate-x-full transition-transform duration-500 ease-in-out flex flex-col">
+        <div class="p-6 border-b-4 border-black bg-yellow-300 flex justify-between items-center">
+            <h2 class="text-xl font-black uppercase italic leading-none">Profil Saya</h2>
+            <button onclick="toggleProfile()" class="w-10 h-10 bg-white cartoon-border rounded-xl flex items-center justify-center cartoon-shadow-sm active:translate-y-1">
+                <i data-lucide="x" class="w-6 h-6 text-black"></i>
+            </button>
+        </div>
+
+        <div class="flex-1 overflow-y-auto p-6 space-y-6">
+            <div class="text-center space-y-3">
+                <div class="w-24 h-24 bg-primary cartoon-border rounded-3xl mx-auto flex items-center justify-center cartoon-shadow">
+                    <i data-lucide="user" class="text-white w-12 h-12"></i>
+                </div>
+                <div>
+                    <h3 id="profile-name" class="font-black text-lg uppercase italic text-black">Guest</h3>
+                    <span class="text-[10px] font-bold bg-aksen cartoon-border px-3 py-1 rounded-full uppercase">Penyewa</span>
+                </div>
+            </div>
+
+            <hr class="border-2 border-black border-dashed">
+
+            <div class="space-y-4">
+                <div class="space-y-1">
+                    <span class="text-[10px] font-black text-gray-400 uppercase italic">Email</span>
+                    <p id="profile-email" class="font-bold text-sm text-black">guest@example.com</p>
+                </div>
+                <div class="space-y-1">
+                    <span class="text-[10px] font-black text-gray-400 uppercase italic">No. Telepon</span>
+                    <p id="profile-phone" class="font-bold text-sm text-black">-</p>
+                </div>
+            </div>
+
+            <div class="pt-4 space-y-3">
+                <a href="pengaturan.php" class="flex items-center gap-3 p-4 bg-slate-100 cartoon-border rounded-2xl font-black text-xs uppercase italic hover:bg-yellow-50 transition-colors">
+                    <i data-lucide="history" class="w-4 h-4 text-primary"></i> Pengaturan Akun
+                </a>
+                <a href="riwayat.php" class="flex items-center gap-3 p-4 bg-slate-100 cartoon-border rounded-2xl font-black text-xs uppercase italic hover:bg-yellow-50 transition-colors">
+                    <i data-lucide="settings" class="w-4 h-4 text-gray-600"></i> Riwayat Sewa
+                </a>
+            </div>
+        </div>
+
+        <div class="p-6 border-t-4 border-black">
+            <a href="../logout.php" class="w-full bg-red-500 text-white py-4 rounded-2xl cartoon-border cartoon-shadow-sm font-black text-center block uppercase italic hover:bg-red-600 transition-colors">
+                Keluar
+            </a>
+        </div>
+    </div>
     <script>
         // Menggunakan data dari Output Database PHP
         let currentAlat = <?= $alat ? json_encode($alat) : 'null' ?>;
@@ -327,31 +380,66 @@ if ($alatdb) {
             window.location.href = 'checkout.html';
         }
 
-        function updateNavbarProfil() {
-            const userData = JSON.parse(localStorage.getItem('userSewaIn'));
-            const authContainer = document.getElementById('authContainer'); // ID div tempat tombol login/profil
+        function logout() {
+            window.location.href = '../logout.php';
+        }
 
-            if (authContainer && userData && userData.isLogin) {
-                // Jika sudah login, tampilkan tombol Profil
-                authContainer.innerHTML = `
-            <div class="flex items-center gap-3 bg-white p-1 pr-4 rounded-full border-2 border-slate-100 shadow-sm">
-                <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white">
-                    <i data-lucide="user" class="w-4 h-4"></i>
-                </div>
-                <button onclick="bukaModalProfil()" class="text-[10px] font-black uppercase italic text-slate-900">
-                    ${userData.nama}
-                </button>
-                <button onclick="logout()" class="text-red-500 hover:text-red-700">
-                    <i data-lucide="log-out" class="w-4 h-4"></i>
-                </button>
-            </div>
-        `;
+        function toggleProfile() {
+            const panel = document.getElementById('profile-panel');
+            const overlay = document.getElementById('profile-overlay');
+            if (panel.classList.contains('translate-x-full')) {
+                panel.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+                document.body.style.overflow = 'hidden';
+            } else {
+                panel.classList.add('translate-x-full');
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    document.body.style.overflow = 'auto';
+                }, 300);
             }
         }
 
-        function logout() {
-            localStorage.removeItem('userSewaIn');
-            location.reload();
+        function initProfile() {
+            const userData = JSON.parse(localStorage.getItem('userSewaIn'));
+            if (userData && userData.isLogin) {
+                const nameEl = document.getElementById('profile-name');
+                const emailEl = document.getElementById('profile-email');
+                const phoneEl = document.getElementById('profile-phone');
+                if (nameEl) nameEl.innerText = userData.nama;
+                if (emailEl) emailEl.innerText = userData.email;
+                if (phoneEl && userData.telepon) phoneEl.innerText = userData.telepon;
+            }
+        }
+
+        function updateNavbarProfil() {
+            const userData = JSON.parse(localStorage.getItem('userSewaIn'));
+            const authContainer = document.getElementById('authContainer');
+
+            if (userData && userData.isLogin) {
+                authContainer.innerHTML = `
+                    <button onclick="toggleProfile()" class="flex items-center gap-3 bg-white p-1 pr-1 sm:pr-4 rounded-full border-2 border-slate-100 shadow-sm cartoon-button transition-all">
+                        <div class="w-8 h-8 bg-primary rounded-full flex items-center justify-center text-white">
+                            <i data-lucide="user" class="w-4 h-4"></i>
+                        </div>
+                        <span class="hidden sm:inline text-[10px] font-black uppercase italic text-slate-900">
+                            ${userData.nama.split(' ')[0]}
+                        </span>
+                    </button>
+                `;
+                initProfile();
+                lucide.createIcons();
+            } else if (authContainer) {
+                 authContainer.innerHTML = `
+                    <a href="../login.php" class="flex items-center gap-2 bg-white px-3 py-1 cartoon-border rounded-xl cartoon-shadow-sm font-black text-xs uppercase italic btn-cartoon-buy">
+                        <i data-lucide="log-in" class="w-4 h-4"></i>
+                        <span>Masuk</span>
+                    </a>
+                `;
+                lucide.createIcons();
+            }
         }
 
         window.onload = () => {

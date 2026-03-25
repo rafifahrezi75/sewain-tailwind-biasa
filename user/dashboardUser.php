@@ -162,7 +162,7 @@
                         </div>
                     </div>
                         <button onclick="toggleProfile()" class="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button transition-all uppercase text-xs font-black">
-                        <i data-lucide="user" class="w-4 h-4"></i> Profil
+                        <i data-lucide="user" class="w-4 h-4"></i> <span id="nav-profile-text">Profil</span>
                         </button>
                 </div>
             </div>
@@ -405,9 +405,10 @@
                                 ?></span>
                                 <span class="text-slate-400 text-[10px] font-bold">/ hari</span>
                             </div>
-                            <a href="../login.php"
-                                class="w-full bg-primary text-white py-2.5 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button font-black text-[10px] text-center block uppercase italic">PINJAM
-                                ALAT</a>
+                                 <button onclick="checkLoginBeforeBorrow(<?= $alat['idalat'] ?>)"
+                                    class="w-full bg-primary text-white py-2.5 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button font-black text-[10px] text-center block uppercase italic">
+                                    PINJAM ALAT
+                                </button>
                         </div>
                     </div>
                     <?php endwhile; ?>
@@ -550,8 +551,8 @@
                 <i data-lucide="user" class="text-white w-12 h-12"></i>
             </div>
             <div>
-                <h3 class="font-black text-lg uppercase italic">Fahis Prasetya</h3>
-                <span class="text-[10px] font-bold bg-aksen cartoon-border px-3 py-1 rounded-full uppercase">Aktif</span>
+                <h3 id="profile-name" class="font-black text-lg uppercase italic">Guest</h3>
+                <span class="text-[10px] font-bold bg-aksen cartoon-border px-3 py-1 rounded-full uppercase">Penyewa</span>
             </div>
         </div>
 
@@ -560,11 +561,11 @@
         <div class="space-y-4">
             <div class="space-y-1">
                 <span class="text-[10px] font-black text-gray-400 uppercase italic">Email</span>
-                <p class="font-bold text-sm">fahisprasetya023@gmail.com</p>
+                <p id="profile-email" class="font-bold text-sm">guest@example.com</p>
             </div>
             <div class="space-y-1">
                 <span class="text-[10px] font-black text-gray-400 uppercase italic">No. Telepon</span>
-                <p class="font-bold text-sm">+62 877-7660-0292</p>
+                <p id="profile-phone" class="font-bold text-sm">-</p>
             </div>
         </div>
 
@@ -628,26 +629,91 @@
             }
         });
 
-        function toggleProfile() {
-        const panel = document.getElementById('profile-panel');
-        const overlay = document.getElementById('profile-overlay');
-        
-        // Jika panel sedang tertutup
-        if (panel.classList.contains('translate-x-full')) {
-            panel.classList.remove('translate-x-full');
-            overlay.classList.remove('hidden');
-            setTimeout(() => overlay.classList.add('opacity-100'), 10);
-            document.body.style.overflow = 'hidden'; // Kunci scroll layar utama
-        } else {
-            // Jika panel sedang terbuka
-            panel.classList.add('translate-x-full');
-            overlay.classList.remove('opacity-100');
+        function showGuestAlert(message = "Silakan Masuk Untuk Melanjutkan") {
+            // Container overlay yang menangani centering secara flexbox
+            const overlay = document.createElement('div');
+            overlay.className = "fixed inset-0 bg-black/60 backdrop-blur-sm z-[299] flex items-center justify-center p-6";
+            document.body.appendChild(overlay);
+
+            const toast = document.createElement('div');
+            toast.className = "bg-white cartoon-border cartoon-shadow p-10 flex flex-col items-center gap-8 text-center animate-bounce w-full max-w-[420px]";
+            toast.innerHTML = `
+                <div class="w-28 h-28 bg-primary cartoon-border rounded-full flex items-center justify-center text-white cartoon-shadow-sm">
+                    <i data-lucide="lock" class="w-14 h-14"></i>
+                </div>
+                <div class="space-y-4">
+                    <h4 class="font-black text-3xl uppercase italic text-slate-900 leading-tight">Akses Terbatas!</h4>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest leading-relaxed">${message}</p>
+                </div>
+                <div class="w-full">
+                    <div class="bg-yellow-300 cartoon-border px-6 py-4 font-black text-[10px] uppercase italic cartoon-shadow-sm flex items-center justify-center gap-3">
+                         <div class="w-2 h-2 bg-black rounded-full animate-ping"></div>
+                         MENGALIHKAN KE HALAMAN LOGIN...
+                    </div>
+                </div>
+            `;
+            overlay.appendChild(toast);
+            lucide.createIcons();
+            
             setTimeout(() => {
-                overlay.classList.add('hidden');
-                document.body.style.overflow = 'auto'; // Aktifkan scroll kembali
-            }, 300);
+                window.location.href = '../login.php';
+            }, 2000);
         }
+
+        function checkLoginBeforeBorrow(idalat) {
+            const userData = JSON.parse(localStorage.getItem('userSewaIn'));
+            if (!userData || !userData.isLogin) {
+                showGuestAlert("Silakan Masuk Terlebih Dahulu Untuk Meminjam Alat");
+                return;
+            }
+            window.location.href = 'detailAlat.php?id=' + idalat;
         }
+
+        function toggleProfile() {
+            const userData = JSON.parse(localStorage.getItem('userSewaIn'));
+            if (!userData || !userData.isLogin) {
+                showGuestAlert("Silakan Masuk Terlebih Dahulu Untuk Melihat Profil Anda");
+                return;
+            }
+
+            const panel = document.getElementById('profile-panel');
+            const overlay = document.getElementById('profile-overlay');
+            
+            // Jika panel sedang tertutup
+            if (panel.classList.contains('translate-x-full')) {
+                panel.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+                setTimeout(() => overlay.classList.add('opacity-100'), 10);
+                document.body.style.overflow = 'hidden'; // Kunci scroll layar utama
+            } else {
+                // Jika panel sedang terbuka
+                panel.classList.add('translate-x-full');
+                overlay.classList.remove('opacity-100');
+                setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    document.body.style.overflow = 'auto'; // Aktifkan scroll kembali
+                }, 300);
+            }
+        }
+
+        function initProfile() {
+            const userData = JSON.parse(localStorage.getItem('userSewaIn'));
+            if (userData && userData.isLogin) {
+                document.getElementById('profile-name').innerText = userData.nama;
+                document.getElementById('profile-email').innerText = userData.email;
+                if (document.getElementById('nav-profile-text')) {
+                    document.getElementById('nav-profile-text').innerText = userData.nama.split(' ')[0];
+                }
+                // Jika Anda menyimpan nomor telepon di localStorage, tampilkan di sini
+                if (userData.telepon) {
+                    document.getElementById('profile-phone').innerText = userData.telepon;
+                }
+            }
+        }
+
+        window.onload = () => {
+            initProfile();
+        };
 
     </script>
 </body>

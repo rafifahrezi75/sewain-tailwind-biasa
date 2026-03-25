@@ -107,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="w-full md:w-[55%] p-8 md:p-12 relative">
 
             <div class="mb-6">
-                <a href="index.html"
+                <a href="user/dashboardUser.php"
                     class="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-primary transition-colors group">
                     <i data-lucide="arrow-left" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform"></i>
                     Kembali ke Beranda
@@ -193,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         text: '<?= addslashes(htmlspecialchars($error)) ?>',
         confirmButtonColor: '#1E3A8A'
     });
-    
+
     <?php elseif (isset($success)): ?>
     // Simpan data ke LocalStorage untuk keperluan frontend (Navbar, dsb)
     const userData = {
