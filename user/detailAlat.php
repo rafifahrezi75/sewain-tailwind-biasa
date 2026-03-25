@@ -141,100 +141,96 @@ if ($alatdb) {
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-6 py-10">
-        <div id="contentLoading" class="text-center py-20 font-black text-slate-300 italic uppercase">Memuat Data
-            Alat...</div>
+<main class="max-w-6xl mx-auto px-6 py-10">
+    <div id="contentLoading" class="text-center py-20 font-black text-slate-300 italic uppercase">Memuat Data Alat...</div>
 
-        <div id="mainContent" class="hidden flex flex-col lg:flex-row gap-12">
-            <div class="w-full lg:w-1/2">
-                <div class="bg-card-blue rounded-[2.5rem] p-6 cartoon-border cartoon-shadow sticky top-24">
-                    <div
-                        class="bg-white cartoon-border rounded-[2rem] border-dashed border-4 aspect-square flex items-center justify-center mb-6 overflow-hidden relative">
-                        <div class="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-400 via-transparent to-transparent"></div>
-                        <i id="alatIcon" data-lucide="chef-hat" class="w-40 h-40 text-black drop-shadow-xl relative z-10 transition-transform duration-500 hover:scale-110"></i>
-                    </div>
-                    <div class="flex flex-wrap gap-4" id="galleryContainer">
-                        <div
-                            class="w-20 h-20 bg-card-yellow cartoon-border rounded-2xl flex items-center justify-center cartoon-shadow-sm hover:-translate-y-1 transition-transform cursor-pointer">
-                            <i data-lucide="image" class="w-8 h-8 text-black"></i>
-                        </div>
-                    </div>
+    <div id="mainContent" class="hidden flex flex-col lg:flex-row gap-24 items-stretch">
+        
+        <div class="w-full lg:w-1/2 sticky top-24">
+            <div class="bg-white cartoon-border cartoon-shadow rounded-[2.5rem] p-8 space-y-6">
+                <div class="bg-slate-50 cartoon-border rounded-[2rem] border-dashed border-4 aspect-square flex items-center justify-center overflow-hidden relative mb-4">
+                    <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-400 via-transparent to-transparent"></div>
+                    <i id="alatIcon" data-lucide="chef-hat" class="w-48 h-48 text-black drop-shadow-xl relative z-10 transition-transform duration-500 hover:scale-105"></i>
                 </div>
-            </div>
-
-            <div class="w-full lg:w-1/2 space-y-8 pl-0 lg:pl-4">
-                <div class="bg-white cartoon-border cartoon-shadow rounded-[2rem] p-8">
-                    <div class="flex flex-wrap items-center gap-3">
-                        <span id="alatKategori"
-                            class="bg-card-pink text-black cartoon-border cartoon-shadow-sm text-xs font-black px-4 py-1.5 rounded-xl uppercase italic inline-block">Kategori</span>
-                        <div class="flex items-center gap-1.5 bg-card-green cartoon-border px-3 py-1.5 rounded-xl text-xs font-black text-black uppercase tracking-widest"><i data-lucide="circle-check"
-                                class="w-4 h-4 text-black"></i> Siap Pakai</div>
-                    </div>
-                    <h1 id="alatNama" class="text-4xl md:text-5xl font-black text-slate-900 mt-6 leading-tight italic uppercase drop-shadow-[2px_2px_0px_#fff]">Nama Alat
-                    </h1>
-                </div>
-
-                <div class="bg-card-yellow rounded-[2rem] p-8 cartoon-border cartoon-shadow">
-                    <h3 class="font-black text-black mb-5 text-sm uppercase italic tracking-wider flex items-center gap-2">
-                        <i data-lucide="file-text" class="w-5 h-5"></i> Spesifikasi & Deskripsi
-                    </h3>
-                    <p id="alatDeskripsi" class="text-sm text-black font-bold mb-6 italic leading-relaxed bg-white/50 p-4 rounded-xl cartoon-border">Deskripsi
-                        alat akan muncul di sini.</p>
-                    <ul id="alatSpek"
-                        class="grid grid-cols-2 gap-4 text-xs text-black font-black uppercase italic">
-                    </ul>
-                </div>
-
-                <div class="bg-primary rounded-[2rem] p-8 cartoon-border cartoon-shadow relative overflow-hidden">
-                    <div class="absolute -right-10 -bottom-10 opacity-10">
-                        <i data-lucide="shopping-cart" class="w-40 h-40 text-white"></i>
-                    </div>
-                    <div class="relative z-10">
-                        <div class="flex items-center justify-between mb-8">
-                            <div>
-                                <p class="text-blue-200 text-xs font-black uppercase tracking-[0.2em] mb-2">Harga Sewa
-                                </p>
-                                <h2 class="text-4xl font-black text-white italic drop-shadow-[2px_2px_0px_#000]"><span id="alatHarga">Rp0</span> <span
-                                        class="text-sm font-bold text-blue-200">/ hari</span></h2>
-                            </div>
-                            <div
-                                class="bg-card-green text-black cartoon-border cartoon-shadow-sm text-xs font-black px-4 py-2 rounded-xl uppercase">
-                                Tersedia</div>
-                        </div>
-
-                        <div class="space-y-6">
-                            <div class="bg-white/10 p-4 rounded-2xl cartoon-border border-white/30">
-                                <label
-                                    class="block text-[10px] font-black text-blue-100 uppercase mb-3 text-center tracking-[0.2em]">Jumlah
-                                    Unit</label>
-                                <div class="flex items-center justify-center gap-6">
-                                    <button onclick="changeDetailQty(-1)"
-                                        class="w-12 h-12 flex items-center justify-center bg-white cartoon-border cartoon-shadow-sm rounded-xl text-black hover:bg-card-pink font-black text-2xl btn-cartoon-buy pb-1">-</button>
-                                    <input type="number" id="detailQtyInput" value="1" min="1"
-                                        class="w-16 bg-transparent text-center text-3xl font-black text-white outline-none"
-                                        readonly>
-                                    <button onclick="changeDetailQty(1)"
-                                        class="w-12 h-12 flex items-center justify-center bg-white cartoon-border cartoon-shadow-sm rounded-xl text-black hover:bg-card-green font-black text-2xl btn-cartoon-buy pb-1">+</button>
-                                </div>
-                            </div>
-
-                            <div class="flex flex-col gap-4 pt-2">
-                                <button onclick="tambahKeKeranjangDetail()"
-                                    class="w-full bg-white text-black py-4 rounded-xl font-black text-xs flex items-center justify-center gap-2 btn-cartoon-buy uppercase italic hover:bg-card-blue transition-colors">
-                                    <i data-lucide="shopping-bag" class="w-5 h-5"></i> + Ke Keranjang
-                                </button>
-                                <button onclick="sewaSekarangLangsung()"
-                                    class="w-full bg-aksen text-black py-4 rounded-xl font-black text-sm tracking-widest btn-cartoon-buy uppercase italic drop-shadow-[2px_2px_0px_#fff]">
-                                    SEWA SEKARANG!
-                                </button>
-                            </div>
-                        </div>
+                <div class="flex gap-3 px-1" id="galleryContainer">
+                    <div class="w-16 h-16 bg-card-yellow cartoon-border rounded-xl flex items-center justify-center shadow-[3px_3px_0px_0px_#000] cursor-pointer hover:-translate-y-1 transition-transform">
+                        <i data-lucide="image" class="w-6 h-6 text-black"></i>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
 
+        <div class="w-full lg:w-1/2">
+            <div class="bg-white cartoon-border cartoon-shadow rounded-[2.5rem] p-8 space-y-6">
+                
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span id="alatKategori" class="bg-card-pink text-black cartoon-border text-[10px] font-black px-3 py-1 rounded-lg uppercase italic">Kategori</span>
+                        <div class="flex items-center gap-1.5 bg-card-green cartoon-border px-3 py-1 rounded-lg text-[10px] font-black uppercase">
+                            <i data-lucide="circle-check" class="w-3.5 h-3.5"></i> Tersedia
+                        </div>
+                    </div>
+                    <h1 id="alatNama" class="text-4xl font-black text-slate-900 leading-tight italic uppercase">
+                        Nama Alat Produksi
+                    </h1>
+                    <div class="flex items-center gap-2 mt-3">
+                        <div class="flex text-yellow-400">
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                        </div>
+                        <span class="text-[10px] font-black text-slate-400 uppercase italic">4.9 (Top Rated)</span>
+                    </div>
+                </div>
+
+                <div class="bg-card-yellow rounded-[2rem] p-6 cartoon-border shadow-[4px_4px_0px_0px_#000]">
+                    <h3 class="font-black text-black mb-3 text-xs uppercase italic tracking-wider flex items-center gap-2">
+                        <i data-lucide="file-text" class="w-4 h-4"></i> Spesifikasi
+                    </h3>
+                    <p id="alatDeskripsi" class="text-xs text-black font-bold mb-4 italic leading-relaxed bg-white/40 p-3 rounded-xl cartoon-border">
+                        Deskripsi singkat alat.
+                    </p>
+                    <ul id="alatSpek" class="grid grid-cols-2 gap-3 text-[10px] text-black font-black uppercase italic">
+                        </ul>
+                </div>
+
+                <div class="bg-primary rounded-[1.8rem] p-6 cartoon-border relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 opacity-10">
+                        <i data-lucide="shopping-cart" class="w-24 h-24 text-white"></i>
+                    </div>
+                    
+                    <div class="relative z-10 space-y-5">
+                        <div class="flex items-end justify-between">
+                            <div>
+                                <p class="text-blue-200 text-[10px] font-black uppercase tracking-widest mb-1">Harga Sewa</p>
+                                <h2 class="text-3xl font-black text-white italic drop-shadow-[2px_2px_0px_#000]">
+                                    <span id="alatHarga">Rp0</span> <span class="text-xs font-bold text-blue-200 uppercase">/ hari</span>
+                                </h2>
+                            </div>
+                            <div class="flex items-center bg-white cartoon-border rounded-xl p-1 shadow-[2px_2px_0px_0px_#000]">
+                                <button onclick="changeDetailQty(-1)" class="w-8 h-8 font-black text-lg">-</button>
+                                <input type="number" id="detailQtyInput" value="1" class="w-8 text-center font-black text-sm bg-transparent outline-none" readonly>
+                                <button onclick="changeDetailQty(1)" class="w-8 h-8 font-black text-lg">+</button>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <button onclick="tambahKeKeranjangDetail()" class="bg-white text-black py-3 rounded-xl font-black text-[10px] flex items-center justify-center gap-2 btn-cartoon-buy uppercase italic">
+                                <i data-lucide="shopping-bag" class="w-4 h-4"></i> + Keranjang
+                            </button>
+                            <button onclick="sewaSekarangLangsung()" class="bg-aksen text-black py-3 rounded-xl font-black text-[10px] tracking-tighter btn-cartoon-buy uppercase italic shadow-[2px_2px_0px_0px_#fff]">
+                                SEWA SEKARANG!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
     <script>
         // Menggunakan data dari Output Database PHP
         let currentAlat = <?= $alat ? json_encode($alat) : 'null' ?>;
