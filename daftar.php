@@ -1,5 +1,42 @@
+<?php
+include 'config.php';
+
+$error = '';
+$success = '';
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nama     = trim(mysqli_real_escape_string($conn, $_POST['nama'] ?? ''));
+    $email    = trim(mysqli_real_escape_string($conn, $_POST['email'] ?? ''));
+    $password = $_POST['password'] ?? '';
+    $terms    = isset($_POST['terms']);
+
+    if (!$nama || !$email || !$password) {
+        $error = 'Semua field wajib diisi.';
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $error = 'Format email tidak valid.';
+    } elseif (strlen($password) < 6) {
+        $error = 'Kata sandi minimal 6 karakter.';
+    } elseif (!$terms) {
+        $error = 'Anda harus menyetujui syarat & ketentuan.';
+    } else {
+        $cek = mysqli_query($conn, "SELECT id_user FROM user WHERE email = '$email' LIMIT 1");
+        if ($cek && mysqli_num_rows($cek) > 0) {
+            $error = 'Email sudah terdaftar. Silakan gunakan email lain atau login.';
+        } else {
+            $hashed = password_hash($password, PASSWORD_DEFAULT);
+            $insert = mysqli_query($conn, "INSERT INTO user (nama, email, password, role) VALUES ('$nama', '$email', '$hashed', 'user')");
+            if ($insert) {
+                $success = 'Akun berhasil dibuat! Silakan login.';
+            } else {
+                $error = 'Gagal mendaftar: ' . mysqli_error($conn);
+            }
+        }
+    }
+}
+?>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet">
 
@@ -68,7 +105,7 @@
 
         <div class="w-full md:w-[55%] p-8 md:p-12">
             <div class="mb-6">
-                <a href="index.html"
+                <a href="dashboardUser.php"
                     class="inline-flex items-center gap-2 text-xs font-bold text-slate-400 hover:text-primary transition-colors group">
                     <i data-lucide="arrow-left" class="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform"></i>
                     Kembali ke Beranda
@@ -80,14 +117,15 @@
                 <p class="text-slate-500 text-sm font-medium">Lengkapi data untuk mulai menyewa.</p>
             </div>
 
-            <form action="index.html" class="space-y-4">
+            <form action="daftar.php" method="POST" class="space-y-4">
                 <div>
                     <label class="block text-[11px] font-bold text-slate-700 mb-1.5 ml-1">Nama Lengkap</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
                             <i data-lucide="user" class="w-4 h-4"></i>
                         </span>
-                        <input type="text" required placeholder="Andi Pratama"
+                        <input type="text" name="nama" required placeholder="Andi Pratama"
+                            value="<?= htmlspecialchars($_POST['nama'] ?? '') ?>"
                             class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus-ring transition-all text-sm font-medium text-slate-900">
                     </div>
                 </div>
@@ -98,7 +136,8 @@
                         <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
                             <i data-lucide="mail" class="w-4 h-4"></i>
                         </span>
-                        <input type="email" required placeholder="nama@email.com"
+                        <input type="email" name="email" required placeholder="nama@email.com"
+                            value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
                             class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus-ring transition-all text-sm font-medium text-slate-900">
                     </div>
                 </div>
@@ -109,13 +148,13 @@
                         <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
                             <i data-lucide="lock" class="w-4 h-4"></i>
                         </span>
-                        <input type="password" required placeholder="••••••••"
+                        <input type="password" name="password" required placeholder="••••••••"
                             class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus-ring transition-all text-sm font-medium text-slate-900">
                     </div>
                 </div>
 
                 <div class="flex items-start gap-2 pt-1">
-                    <input type="checkbox" required id="terms"
+                    <input type="checkbox" name="terms" required id="terms"
                         class="mt-1 w-3.5 h-3.5 rounded border-slate-300 text-primary focus:ring-primary">
                     <label for="terms" class="text-[10px] font-medium text-slate-500 leading-tight">
                         Saya setuju dengan <a href="#" class="text-primary font-bold hover:underline">Syarat &
@@ -138,7 +177,7 @@
                 </div>
             </div>
 
-            <a href="login.html"
+            <a href="login.php"
                 class="w-full flex items-center justify-center gap-2 border-2 border-slate-100 text-slate-600 py-3 rounded-xl font-bold hover:bg-slate-50 transition-all tracking-tight uppercase text-[10px]">
                 Kembali ke Halaman Masuk
             </a>
@@ -148,4 +187,29 @@
 
 <script>
     lucide.createIcons();
+
+    // Mencegah resubmit form saat halaman di-refresh (F5) dan mengosongkan nilai form
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+
+    <?php if ($error): ?>
+    Swal.fire({
+        icon: 'error',
+        title: 'Pendaftaran Gagal',
+        text: '<?= addslashes(htmlspecialchars($error)) ?>',
+        confirmButtonColor: '#1E3A8A',
+        confirmButtonText: 'Coba Lagi'
+    });
+    <?php elseif ($success): ?>
+    Swal.fire({
+        icon: 'success',
+        title: 'Akun Berhasil Dibuat! 🎉',
+        text: 'Selamat datang di SewaIn! Silakan login untuk mulai menyewa.',
+        confirmButtonColor: '#14B8A6',
+        confirmButtonText: 'Login Sekarang'
+    }).then(() => {
+        window.location.href = 'login.php';
+    });
+    <?php endif; ?>
 </script>

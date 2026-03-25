@@ -1,37 +1,68 @@
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+<?php
+session_start();
+include 'config.php';
 
-<style>
-    body {
-        font-family: 'Plus Jakarta Sans', sans-serif;
-        background-color: #F1F5F9;
-    }
+$error = '';
 
-    .text-primary {
-        color: #1E3A8A;
-    }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email    = trim(mysqli_real_escape_string($conn, $_POST['email'] ?? ''));
+    $password = $_POST['password'] ?? '';
 
-    .bg-primary {
-        background-color: #1E3A8A;
-    }
+    if (!$email || !$password) {
+        $error = 'Email dan kata sandi wajib diisi.';
+    } else {
+        $query = mysqli_query($conn, "SELECT * FROM user WHERE email = '$email' LIMIT 1");
+        if ($query && mysqli_num_rows($query) > 0) {
+            $user = mysqli_fetch_assoc($query);
+            if (password_verify($password, $user['password'])) {
+                // Login Berhasil
+                $_SESSION['is_login'] = true;
+                $_SESSION['id_user']  = $user['id_user'];
+                $_SESSION['nama']     = $user['nama'];
+                $_SESSION['role']     = $user['role'];
+                $_SESSION['email']    = $user['email'];
 
-    .bg-aksen {
-        background-color: #14B8A6;
+                $success = true;
+            } else {
+                $error = 'Kata sandi yang Anda masukkan salah.';
+            }
+        } else {
+            $error = 'Email tidak terdaftar atau akun tidak ditemukan.';
+        }
     }
+}
+?>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SewaIn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
 
-    .text-aksen {
-        color: #14B8A6;
-    }
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #F1F5F9;
+        }
 
-    /* Custom Focus Ring sesuai warna Aksen */
-    .focus-ring:focus {
-        border-color: #14B8A6;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
-    }
-</style>
+        .text-primary { color: #1E3A8A; }
+        .bg-primary { background-color: #1E3A8A; }
+        .bg-aksen { background-color: #14B8A6; }
+        .text-aksen { color: #14B8A6; }
+
+        .focus-ring:focus {
+            border-color: #14B8A6;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+        }
+    </style>
+</head>
+<body>
 
 <div class="min-h-screen flex items-center justify-center p-6">
     <div
@@ -89,14 +120,15 @@
                         class="text-primary font-bold">SewaIn</span> Anda.</p>
             </div>
 
-            <form action="index.html" class="space-y-5">
+            <form action="login.php" method="POST" class="space-y-5">
                 <div>
                     <label class="block text-[11px] font-bold text-slate-700 mb-1.5 ml-1">Alamat Email</label>
                     <div class="relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
                             <i data-lucide="mail" class="w-4 h-4"></i>
                         </span>
-                        <input type="email" required placeholder="nama@email.com"
+                        <input type="email" name="email" required placeholder="nama@email.com"
+                            value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
                             class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus-ring transition-all text-sm font-medium text-slate-900">
                     </div>
                 </div>
@@ -110,7 +142,7 @@
                         <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-slate-400">
                             <i data-lucide="lock" class="w-4 h-4"></i>
                         </span>
-                        <input type="password" required placeholder="••••••••"
+                        <input type="password" name="password" required placeholder="••••••••"
                             class="w-full pl-11 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus-ring transition-all text-sm font-medium text-slate-900">
                     </div>
                 </div>
@@ -138,7 +170,7 @@
 
             <p class="text-center text-slate-600 text-sm font-medium">
                 Belum punya akun?
-                <a href="daftar.html"
+                <a href="daftar.php"
                     class="text-primary font-black hover:underline ml-1 uppercase tracking-tight text-xs">Daftar
                     Sekarang</a>
             </p>
@@ -148,4 +180,42 @@
 
 <script>
     lucide.createIcons();
+
+    // Clear POST history on refresh
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+
+    <?php if ($error): ?>
+    Swal.fire({
+        icon: 'error',
+        title: 'Gagal Masuk',
+        text: '<?= addslashes(htmlspecialchars($error)) ?>',
+        confirmButtonColor: '#1E3A8A'
+    });
+    
+    <?php elseif (isset($success)): ?>
+    // Simpan data ke LocalStorage untuk keperluan frontend (Navbar, dsb)
+    const userData = {
+        isLogin: true,
+        id: '<?= $_SESSION['id_user'] ?>',
+        nama: '<?= addslashes($_SESSION['nama']) ?>',
+        email: '<?= addslashes($_SESSION['email']) ?>',
+        role: '<?= $_SESSION['role'] ?>',
+        token: '<?= md5($_SESSION['email'] . time()) ?>' // Simple token placeholder
+    };
+    localStorage.setItem('userSewaIn', JSON.stringify(userData));
+
+    Swal.fire({
+        icon: 'success',
+        title: 'Berhasil Masuk!',
+        text: 'Selamat datang kembali, <?= addslashes(htmlspecialchars($_SESSION['nama'])) ?>!',
+        showConfirmButton: false,
+        timer: 1500
+    }).then(() => {
+        window.location.href = '<?= ($_SESSION['role'] === 'admin') ? "admin/alat.php" : "user/dashboardUser.php" ?>';
+    });
+    <?php endif; ?>
 </script>
+</body>
+</html>
