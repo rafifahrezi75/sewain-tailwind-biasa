@@ -22,7 +22,7 @@ session_destroy();
         localStorage.removeItem('userSewaIn');
     </script>
 
-    <div id="logoutToast" class="bg-white cartoon-border cartoon-shadow p-12 flex flex-col items-center gap-8 text-center w-full max-w-[420px] animate-bounce">
+    <div id="logoutToast" class="bg-white cartoon-border cartoon-shadow p-12 flex flex-col items-center gap-8 text-center w-full max-w-[420px]">
         <div class="w-28 h-28 bg-emerald-400 cartoon-border rounded-full flex items-center justify-center text-white cartoon-shadow-sm">
             <i data-lucide="check-circle-2" class="w-14 h-14"></i>
         </div>

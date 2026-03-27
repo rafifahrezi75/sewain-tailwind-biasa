@@ -179,7 +179,7 @@ while ($row = mysqli_fetch_assoc($query_keranjang)) {
 
     <!-- Modal Konfirmasi Custom (Cartoon) -->
     <div id="confirmModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-[300] hidden items-center justify-center p-6">
-        <div class="bg-white cartoon-border cartoon-shadow p-10 flex flex-col items-center gap-6 text-center w-full max-w-[400px] animate-bounce">
+        <div class="bg-white cartoon-border cartoon-shadow p-10 flex flex-col items-center gap-6 text-center w-full max-w-[400px]">
             <div class="w-20 h-20 bg-red-100 cartoon-border rounded-full flex items-center justify-center text-red-500 cartoon-shadow-sm">
                 <i data-lucide="alert-circle" class="w-10 h-10"></i>
             </div>

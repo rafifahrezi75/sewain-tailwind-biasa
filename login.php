@@ -188,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <?php if ($error): ?>
     const errorToast = document.createElement('div');
-    errorToast.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[300] bg-white border-[3px] border-black shadow-[8px_8px_0px_0px_#000] p-10 flex flex-col items-center gap-6 text-center animate-bounce w-full max-w-[400px]";
+    errorToast.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[300] bg-white border-[3px] border-black shadow-[8px_8px_0px_0px_#000] p-10 flex flex-col items-center gap-6 text-center w-full max-w-[400px]";
     errorToast.innerHTML = `
         <div class="w-20 h-20 bg-red-100 border-[3px] border-black rounded-full flex items-center justify-center text-red-500 shadow-[4px_4px_0px_0px_#000]">
             <i data-lucide="alert-circle" class="w-10 h-10"></i>
@@ -214,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     localStorage.setItem('userSewaIn', JSON.stringify(userData));
 
     const successToast = document.createElement('div');
-    successToast.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[300] bg-white border-[3px] border-black shadow-[8px_8px_0px_0px_#000] p-10 flex flex-col items-center gap-6 text-center animate-bounce w-full max-w-[400px]";
+    successToast.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[300] bg-white border-[3px] border-black shadow-[8px_8px_0px_0px_#000] p-10 flex flex-col items-center gap-6 text-center w-full max-w-[400px]";
     successToast.innerHTML = `
         <div class="w-20 h-20 bg-emerald-100 border-[3px] border-black rounded-full flex items-center justify-center text-emerald-500 shadow-[4px_4px_0px_0px_#000]">
             <i data-lucide="check-circle" class="w-10 h-10"></i>

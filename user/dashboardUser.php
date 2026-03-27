@@ -636,7 +636,7 @@
             document.body.appendChild(overlay);
 
             const toast = document.createElement('div');
-            toast.className = "bg-white cartoon-border cartoon-shadow p-10 flex flex-col items-center gap-8 text-center animate-bounce w-full max-w-[420px]";
+            toast.className = "bg-white cartoon-border cartoon-shadow p-10 flex flex-col items-center gap-8 text-center w-full max-w-[420px]";
             toast.innerHTML = `
                 <div class="w-28 h-28 bg-primary cartoon-border rounded-full flex items-center justify-center text-white cartoon-shadow-sm">
                     <i data-lucide="lock" class="w-14 h-14"></i>
