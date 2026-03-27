@@ -122,7 +122,7 @@
                     </div>
                 </div>
 
-                <div class="hidden md:flex items-center gap-10 text-sm font-extrabold text-gray-600">
+                <div class="hidden md:flex items-center gap-6 text-sm font-extrabold text-gray-600">
                     <a href="dashboardUser.php" class="nav-link active hover:text-primary transition">Beranda</a>
                     <a href="#tentang" class="nav-link hover:text-primary transition">Tentang Kami</a>
                     <div class="relative dropdown group py-4 cursor-pointer">
@@ -161,9 +161,9 @@
                             </a>
                         </div>
                     </div>
-                        <button onclick="toggleProfile()" class="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button transition-all uppercase text-xs font-black">
-                        <i data-lucide="user" class="w-4 h-4"></i> <span id="nav-profile-text">Profil</span>
-                        </button>
+                    <button onclick="toggleProfile()" class="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button transition-all uppercase text-xs font-black">
+                    <i data-lucide="user" class="w-4 h-4"></i> <span id="nav-profile-text">Profil</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -711,8 +711,24 @@
             }
         }
 
+        function updateBadge(count) {
+            const badge = document.getElementById('cartCount');
+            const badgeNav = document.getElementById('cartCountNav');
+            if (badge) {
+                badge.innerText = count;
+                badge.classList.toggle('invisible', count <= 0);
+            }
+            if (badgeNav) {
+                badgeNav.innerText = count;
+                badgeNav.classList.toggle('invisible', count <= 0);
+            }
+        }
+
         window.onload = () => {
-            initProfile();
+             initProfile();
+             fetch('get_cart_count.php')
+             .then(res => res.json())
+             .then(data => updateBadge(data.count));
         };
 
     </script>

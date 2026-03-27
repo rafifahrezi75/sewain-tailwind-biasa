@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../config.php';
 
 $id_alat = isset($_GET['id']) ? (int)$_GET['id'] : 0;
@@ -219,7 +220,7 @@ if ($alatdb) {
                         </div>
 
                         <div class="grid grid-cols-2 gap-3">
-                            <button onclick="tambahKeKeranjangDetail()" class="bg-white text-black py-3 rounded-xl font-black text-[10px] flex items-center justify-center gap-2 btn-cartoon-buy uppercase italic">
+                            <button onclick="tambahKeKeranjang()" class="bg-white text-black py-3 rounded-xl font-black text-[10px] flex items-center justify-center gap-2 btn-cartoon-buy uppercase italic">
                                 <i data-lucide="shopping-bag" class="w-4 h-4"></i> + Keranjang
                             </button>
                             <button onclick="sewaSekarangLangsung()" class="bg-aksen text-black py-3 rounded-xl font-black text-[10px] tracking-tighter btn-cartoon-buy uppercase italic shadow-[2px_2px_0px_0px_#fff]">
@@ -284,6 +285,17 @@ if ($alatdb) {
             </a>
         </div>
     </div>
+
+    <a href="keranjang.php"
+        class="fixed bottom-8 right-8 z-[100] bg-aksen text-white px-8 py-5 rounded-2xl cartoon-border cartoon-shadow flex items-center gap-3 cartoon-button transition-all group">
+        <div class="relative">
+            <i data-lucide="shopping-bag" class="w-7 h-7 text-white"></i>
+            <span id="cartCount"
+                class="absolute -top-3 -right-3 bg-red-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-black animate-bounce invisible">0</span>
+        </div>
+        <span class="font-black text-sm tracking-tight uppercase italic">Lihat Keranjang</span>
+    </a>
+
     <script>
         // Menggunakan data dari Output Database PHP
         let currentAlat = <?= $alat ? json_encode($alat) : 'null' ?>;
@@ -351,22 +363,62 @@ if ($alatdb) {
         }
 
         // Tombol TAMBAH KE KERANJANG (Biasa)
-        function tambahKeKeranjangDetail() {
-            // Hapus mode langsung jika ada, karena user memilih jalur keranjang biasa
-            localStorage.removeItem('mode_checkout');
-
+        function tambahKeKeranjang() {
             const qty = parseInt(document.getElementById('detailQtyInput').value);
-            let keranjang = JSON.parse(localStorage.getItem('keranjangSewaIn')) || [];
+            const userData = JSON.parse(localStorage.getItem('userSewaIn'));
             
-            const index = keranjang.findIndex(item => item.id === currentAlat.id);
-            if (index === -1) {
-                keranjang.push({ ...currentAlat, qty: qty, durasi: 1 });
-            } else {
-                keranjang[index].qty += qty;
+            if (!userData || !userData.isLogin) {
+                const toast = document.createElement('div');
+                toast.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[301] bg-white cartoon-border cartoon-shadow p-10 flex flex-col items-center gap-6 text-center animate-bounce w-full max-w-[400px]";
+                toast.innerHTML = `
+                    <div class="w-20 h-20 bg-primary cartoon-border rounded-full flex items-center justify-center text-white cartoon-shadow-sm">
+                        <i data-lucide="lock" class="w-10 h-10"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-xl uppercase italic mb-2">Akses Terbatas!</h4>
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-tight italic">Silakan Masuk Terlebih Dahulu Untuk Menambahkan ke Keranjang</p>
+                    </div>
+                    <div class="flex flex-col gap-2 w-full">
+                        <div class="bg-yellow-300 cartoon-border px-4 py-2 font-black text-[10px] uppercase italic">Mengalihkan ke halaman login...</div>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+                lucide.createIcons();
+                setTimeout(() => window.location.href = '../login.php', 2000);
+                return;
             }
-            localStorage.setItem('keranjangSewaIn', JSON.stringify(keranjang));
 
-            alert("Keren! " + currentAlat.nama + " berhasil masuk keranjang!");
+            // AJAX ke add_to_cart.php
+            fetch('add_to_cart.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `idalat=<?= $id_alat ?>&jumlah=${qty}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    updateBadge(data.total_items);
+                    const toast = document.createElement('div');
+                    toast.className = "fixed top-5 left-1/2 -translate-x-1/2 z-[200] bg-yellow-300 cartoon-border cartoon-shadow px-6 py-3 font-black uppercase italic text-xs animate-bounce";
+                    toast.innerText = `🚀 ${qty} Alat Berhasil Di Tambahkan!`;
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 2500);
+                } else {
+                    const toast = document.createElement('div');
+                    toast.className = "fixed top-5 left-1/2 -translate-x-1/2 z-[200] bg-red-400 text-white cartoon-border cartoon-shadow px-6 py-3 font-black uppercase italic text-xs animate-bounce";
+                    toast.innerText = `❌ ${data.message || 'Gagal menambahkan'}`;
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 2500);
+                }
+            });
+        }
+
+        function updateBadge(count) {
+            const badge = document.getElementById('cartCount');
+            if (badge) {
+                badge.innerText = count;
+                badge.classList.toggle('invisible', count <= 0);
+            }
         }
 
         // Tombol SEWA SEKARANG (Jalur Cepat)
@@ -445,6 +497,9 @@ if ($alatdb) {
         window.onload = () => {
             initDetail();
             updateNavbarProfil();
+            fetch('get_cart_count.php')
+                .then(res => res.json())
+                .then(data => updateBadge(data.count));
         };
 
     </script>

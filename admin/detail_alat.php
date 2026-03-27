@@ -83,6 +83,9 @@
 
     // get fotodetail
     $query_foto = mysqli_query($conn, "SELECT * FROM fotodetail WHERE idalat = '$id' ORDER BY idfotodetail ASC");
+    // counts
+    $num_spek = mysqli_num_rows($query_spek);
+    $num_foto = mysqli_num_rows($query_foto);
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -317,13 +320,23 @@
                             <!-- Table Header -->
                             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                                 <div>
-                                    <h3 class="text-base font-bold text-gray-800">Spesifikasi Teknis</h3>
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-base font-bold text-gray-800">Spesifikasi Teknis</h3>
+                                        <span class="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-red-400 uppercase tracking-tighter shadow-sm border border-gray-200">Maks 4</span>
+                                    </div>
                                     <p class="text-xs text-gray-400 mt-0.5">Detail spesifikasi <?php echo htmlspecialchars($data['nama_alat']); ?></p>
                                 </div>
+                                <?php if ($num_spek < 4): ?>
                                 <button @click="modalTambah = true" class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 transition-all shadow-sm focus:outline-none">
                                     <i class='bx bx-plus text-lg'></i>
                                     <span>Tambah Spek</span>
                                 </button>
+                                <?php else: ?>
+                                <div class="inline-flex items-center gap-2 rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-red-400 cursor-not-allowed border border-gray-200">
+                                    <i class='bx bx-plus text-lg'></i>
+                                    <span>Penuh (Max 4)</span>
+                                </div>
+                                <?php endif; ?>
                             </div>
 
                             <!-- Spek Table -->
@@ -484,13 +497,23 @@
                             <!-- Header -->
                             <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
                                 <div>
-                                    <h3 class="text-base font-bold text-gray-800">Foto Tambahan</h3>
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-base font-bold text-gray-800">Foto Tambahan</h3>
+                                        <span class="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-bold text-red-400 uppercase tracking-tighter shadow-sm border border-gray-200">Maks 5</span>
+                                    </div>
                                     <p class="text-xs text-gray-400 mt-0.5">Galeri foto detail <?php echo htmlspecialchars($data['nama_alat']); ?></p>
                                 </div>
+                                <?php if ($num_foto < 5): ?>
                                 <button @click="modalFoto = true" class="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white hover:bg-brand-600 transition-all shadow-sm focus:outline-none">
                                     <i class='bx bx-image-add text-lg'></i>
                                     <span>Tambah Foto</span>
                                 </button>
+                                <?php else: ?>
+                                <div class="inline-flex items-center gap-2 rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-red-400 cursor-not-allowed border border-gray-200">
+                                    <i class='bx bx-image-add text-lg'></i>
+                                    <span>Penuh (Max 5)</span>
+                                </div>
+                                <?php endif; ?>
                             </div>
 
                             <!-- Photo Grid -->

@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../config.php';
 
 $kat_filter = isset($_GET['kategori']) ? $_GET['kategori'] : 'Semua';
@@ -202,12 +203,12 @@ if ($query_produk) {
         </main>
     </div>
 
-    <a href="keranjang.html"
+    <a href="keranjang.php"
         class="fixed bottom-8 right-8 z-[100] bg-aksen text-white px-8 py-5 rounded-2xl cartoon-border cartoon-shadow flex items-center gap-3 cartoon-button transition-all group">
         <div class="relative">
             <i data-lucide="shopping-bag" class="w-7 h-7 text-white"></i>
             <span id="cartCount"
-                class="absolute -top-3 -right-3 bg-red-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-black animate-bounce">0</span>
+                class="absolute -top-3 -right-3 bg-red-500 text-white text-[10px] font-black w-6 h-6 rounded-full flex items-center justify-center border-2 border-black animate-bounce invisible">0</span>
         </div>
         <span class="font-black text-sm tracking-tight uppercase italic">Lihat Keranjang</span>
     </a>
@@ -308,32 +309,60 @@ if ($query_produk) {
 
         function konfirmasiTambah() {
             const qty = parseInt(document.getElementById('modalQtyInput').value);
-            let keranjang = JSON.parse(localStorage.getItem('keranjangSewaIn')) || [];
-            const index = keranjang.findIndex(item => item.id === currentSelectedAlat.id);
-
-            if (index === -1) {
-                keranjang.push({ ...currentSelectedAlat, qty: qty, durasi: 1 });
-            } else {
-                keranjang[index].qty += qty;
+            const userData = JSON.parse(localStorage.getItem('userSewaIn'));
+            
+            if (!userData || !userData.isLogin) {
+                const toast = document.createElement('div');
+                toast.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[300] bg-white cartoon-border cartoon-shadow p-10 flex flex-col items-center gap-6 text-center animate-bounce";
+                toast.innerHTML = `
+                    <div class="w-20 h-20 bg-primary cartoon-border rounded-full flex items-center justify-center text-white cartoon-shadow-sm">
+                        <i data-lucide="lock" class="w-10 h-10"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-black text-xl uppercase italic mb-2">Akses Terbatas!</h4>
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-tight italic">Silakan Masuk Terlebih Dahulu Untuk Menambahkan ke Keranjang</p>
+                    </div>
+                    <div class="flex flex-col gap-2 w-full">
+                        <div class="bg-yellow-300 cartoon-border px-4 py-2 font-black text-[10px] uppercase italic">Mengalihkan ke halaman login...</div>
+                    </div>
+                `;
+                document.body.appendChild(toast);
+                lucide.createIcons();
+                setTimeout(() => window.location.href = '../login.php', 2000);
+                return;
             }
 
-            localStorage.setItem('keranjangSewaIn', JSON.stringify(keranjang));
-            updateBadge();
-            closeQtyModal();
-            const toast = document.createElement('div');
-            toast.className = "fixed top-5 left-1/2 -translate-x-1/2 z-[200] bg-yellow-300 cartoon-border cartoon-shadow px-6 py-3 font-black uppercase italic text-xs animate-bounce";
-            toast.innerText = `🚀 ${qty} ${currentSelectedAlat.nama} Berhasil Masuk Keranjang!`;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2500);
+            // AJAX ke add_to_cart.php
+            fetch('add_to_cart.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `idalat=${currentSelectedAlat.id}&jumlah=${qty}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    updateBadge(data.total_items);
+                    closeQtyModal();
+                    const toast = document.createElement('div');
+                    toast.className = "fixed top-5 left-1/2 -translate-x-1/2 z-[200] bg-yellow-300 cartoon-border cartoon-shadow px-6 py-3 font-black uppercase italic text-xs animate-bounce";
+                    toast.innerText = `🚀 ${qty} ${currentSelectedAlat.nama} Berhasil Masuk Keranjang!`;
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 2500);
+                } else {
+                    const toast = document.createElement('div');
+                    toast.className = "fixed top-5 left-1/2 -translate-x-1/2 z-[200] bg-red-400 text-white cartoon-border cartoon-shadow px-6 py-3 font-black uppercase italic text-xs animate-bounce";
+                    toast.innerText = `❌ ${data.message || 'Gagal menambahkan'}`;
+                    document.body.appendChild(toast);
+                    setTimeout(() => toast.remove(), 2500);
+                }
+            });
         }
 
-        function updateBadge() {
-            let keranjang = JSON.parse(localStorage.getItem('keranjangSewaIn')) || [];
-            const totalItems = keranjang.reduce((acc, item) => acc + item.qty, 0);
+        function updateBadge(count) {
             const badge = document.getElementById('cartCount');
             if (badge) {
-                badge.innerText = totalItems;
-                badge.style.display = totalItems > 0 ? 'flex' : 'none';
+                badge.innerText = count;
+                badge.classList.toggle('invisible', count <= 0);
             }
         }
 
@@ -401,6 +430,13 @@ if ($query_produk) {
                 initProfile();
             }
         }
+
+        document.addEventListener('DOMContentLoaded', () => {
+             updateNavbarProfil();
+             fetch('get_cart_count.php')
+             .then(res => res.json())
+             .then(data => updateBadge(data.count));
+        });
     </script>
 </body>
 
