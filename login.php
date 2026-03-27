@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['nama']     = $user['nama'];
                 $_SESSION['role']     = $user['role'];
                 $_SESSION['email']    = $user['email'];
+                $_SESSION['notelp']  = $user['notelp'];
 
                 $success = true;
             } else {
