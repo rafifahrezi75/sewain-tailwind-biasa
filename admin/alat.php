@@ -12,10 +12,10 @@
     $total_alat = $countRow['total'];
     $total_page = ceil($total_alat / $limit);
 
-    // get data alat gabung dengan kategori
+    // get data alat join dengan kategori
     $query = mysqli_query($conn, "SELECT alat.*, kategori.kategori as nama_kategori, kategori.icon FROM alat LEFT JOIN kategori ON alat.idkategori = kategori.idkategori ORDER BY alat.idalat DESC LIMIT $start, $limit");
 
-    // get kategori utk dropdown
+    // get kategori untuk dropdown
     $query_kat = mysqli_query($conn, "SELECT * FROM kategori ORDER BY kategori ASC");
 
     // tambah alat
@@ -176,7 +176,7 @@
 
             <!-- Sidebar Nav -->
             <nav class="flex-1 space-y-2 overflow-y-auto px-3 py-4 scrollbar-hide">
-                <a href="index.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                <a href="dashboardAdmin.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-grid-alt text-xl shrink-0 opacity-80"></i>
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Dashboard</span>
                 </a>
@@ -192,7 +192,7 @@
                     <div x-show="sidebarOpen" class="ml-auto flex h-2 w-2 shrink-0 rounded-full bg-brand-500"></div>
                 </a>
 
-                <a href="transaksi.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                <a href="transaksi.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-shopping-bag text-xl shrink-0 opacity-80"></i>
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Daftar Transaksi</span>
                 </a>
