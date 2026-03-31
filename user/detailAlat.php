@@ -429,7 +429,7 @@ if ($alatdb) {
             localStorage.setItem('checkout_cepat', JSON.stringify(produkSingle));
             localStorage.setItem('mode_checkout', 'langsung'); // SET PENANDA DI SINI
 
-            window.location.href = 'checkout.html';
+            window.location.href = 'checkout.php';
         }
 
         function logout() {

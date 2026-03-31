@@ -149,14 +149,13 @@
                                         Peminjaman</span>
                                 </div>
                             </a>
-                            <a href="#pengembalian"
-                                class="block px-5 py-4 hover:bg-yellow-50 text-gray-700 transition flex items-center gap-3">
-                                <div class="p-2 bg-teal-100 cartoon-border rounded-lg">
-                                    <i data-lucide="package-check" class="w-4 h-4 text-aksen"></i>
-                                </div>
+                            <a href="#pengembalian" class="block px-5 py-4 hover:bg-yellow-50 text-gray-700 transition flex items-center gap-3">
+                            <div class="p-2 bg-teal-100 cartoon-border rounded-lg">
+                             <i data-lucide="package-check" class="w-4 h-4 text-aksen"></i>
+                             </div>
                                 <div>
                                     <span class="block font-black text-xs uppercase italic">Pengembalian</span>
-                                    <span class="text-[9px] text-gray-400 font-bold uppercase">Prosedur Retur</span>
+                                    <span class="text-[9px] text-gray-400 font-bold uppercase">Proses Retur Alat</span>
                                 </div>
                             </a>
                         </div>
@@ -573,7 +572,7 @@
             <a href="pengaturan.php" class="flex items-center gap-3 p-4 bg-slate-100 cartoon-border rounded-2xl font-black text-xs uppercase italic hover:bg-yellow-50 transition-colors">
                 <i data-lucide="history" class="w-4 h-4 text-primary"></i> Pengaturan Akun
             </a>
-            <a href="riwayat.php" class="flex items-center gap-3 p-4 bg-slate-100 cartoon-border rounded-2xl font-black text-xs uppercase italic hover:bg-yellow-50 transition-colors">
+            <a href="riwayat_sewa.php" class="flex items-center gap-3 p-4 bg-slate-100 cartoon-border rounded-2xl font-black text-xs uppercase italic hover:bg-yellow-50 transition-colors">
                 <i data-lucide="settings" class="w-4 h-4 text-gray-600"></i> Riwayat Sewa
             </a>
         </div>

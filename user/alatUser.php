@@ -251,7 +251,7 @@ if ($query_produk) {
                 <a href="pengaturan.php" class="flex items-center gap-3 p-4 bg-slate-100 cartoon-border rounded-2xl font-black text-xs uppercase italic hover:bg-yellow-50 transition-colors">
                     <i data-lucide="history" class="w-4 h-4 text-primary"></i> Pengaturan Akun
                 </a>
-                <a href="riwayat.php" class="flex items-center gap-3 p-4 bg-slate-100 cartoon-border rounded-2xl font-black text-xs uppercase italic hover:bg-yellow-50 transition-colors">
+                <a href="riwayat_sewa.php" class="flex items-center gap-3 p-4 bg-slate-100 cartoon-border rounded-2xl font-black text-xs uppercase italic hover:bg-yellow-50 transition-colors">
                     <i data-lucide="settings" class="w-4 h-4 text-gray-600"></i> Riwayat Sewa
                 </a>
             </div>
