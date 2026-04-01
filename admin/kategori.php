@@ -109,10 +109,6 @@
 
             <!-- Sidebar Nav -->
             <nav class="flex-1 space-y-2 overflow-y-auto px-3 py-4 scrollbar-hide">
-                <a href="dashboardAdmin.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
-                    <i class="bx bx-grid-alt text-xl shrink-0 opacity-80"></i>
-                    <span x-show="sidebarOpen" class="whitespace-nowrap">Dashboard</span>
-                </a>
 
                 <a href="kategori.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none bg-white text-brand-700 shadow-sm" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-layer text-xl shrink-0"></i>
@@ -125,25 +121,17 @@
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Alat Produksi</span>
                 </a>
 
-                <a href="transaksi.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                <a href="transaksi.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-shopping-bag text-xl shrink-0 opacity-80"></i>
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Daftar Transaksi</span>
                 </a>
 
-                <a href="pengembalianAdmin.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                <a href="pengembalianAdmin.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all text-white hover:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-archive-in text-xl shrink-0 opacity-80"></i>
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Pengembalian</span>
                 </a>
 
-                <a href="pelanggan.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
-                    <i class="bx bx-group text-xl shrink-0 opacity-80"></i>
-                    <span x-show="sidebarOpen" class="whitespace-nowrap">Pelanggan UMKM</span>
-                </a>
 
-                <a href="pengaturan.html" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
-                    <i class="bx bx-cog text-xl shrink-0 opacity-80"></i>
-                    <span x-show="sidebarOpen" class="whitespace-nowrap">Pengaturan Sistem</span>
-                </a>
 
             </nav>
 
