@@ -47,7 +47,6 @@
             </a>
             <div>
                 <h1 class="text-3xl font-black uppercase italic tracking-tighter text-slate-900">Aktivitas Sewa</h1>
-                <p class="text-xs font-bold text-slate-500 uppercase italic">Kelola alat yang sedang kamu gunakan</p>
             </div>
         </div>
 
