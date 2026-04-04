@@ -1,3 +1,41 @@
+<?php
+session_start();
+include '../config.php';
+
+if (!isset($_SESSION['id_user'])) {
+    header("Location: ../login.php");
+    exit();
+}
+
+$id_user = $_SESSION['id_user'];
+
+// Query untuk tab aktif
+$q_aktif = mysqli_query($conn, "
+    SELECT p.*, a.nama_alat, a.gambar, pd.idalat,
+           (SELECT COUNT(*) FROM penyewaan_detail pd2 WHERE pd2.idsewa = p.idsewa) as total_item
+    FROM penyewaan p 
+    JOIN penyewaan_detail pd ON p.idsewa = pd.idsewa 
+    JOIN alat a ON pd.idalat = a.idalat 
+    WHERE p.iduser = $id_user AND p.status NOT IN ('selesai', 'dibatalkan', 'ditolak')
+    GROUP BY p.idsewa
+    ORDER BY p.tanggal_mulai DESC
+");
+$aktif_count = mysqli_num_rows($q_aktif);
+
+// Query untuk tab selesai
+$q_selesai = mysqli_query($conn, "
+    SELECT p.*, a.nama_alat, a.gambar, pd.idalat, pp.tanggal_kembali,
+           (SELECT COUNT(*) FROM penyewaan_detail pd2 WHERE pd2.idsewa = p.idsewa) as total_item
+    FROM penyewaan p 
+    JOIN penyewaan_detail pd ON p.idsewa = pd.idsewa 
+    JOIN alat a ON pd.idalat = a.idalat 
+    LEFT JOIN pengembalian pp ON p.idsewa = pp.id_sewa
+    WHERE p.iduser = $id_user AND p.status = 'selesai'
+    GROUP BY p.idsewa
+    ORDER BY p.tanggal_selesai DESC
+");
+$selesai_count = mysqli_num_rows($q_selesai);
+?>
 <!DOCTYPE html>
 <html lang="id">
 
@@ -37,7 +75,7 @@
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 
-<body class="p-4 md:p-8" x-data="{ tab: 'aktif', modalOpen: false }">
+<body class="p-4 md:p-8" x-data="{ tab: 'aktif', modalOpen: false, returnInv: '', returnName: '' }">
 
     <div class="max-w-4xl mx-auto">
         <div class="flex items-center gap-4 mb-10">
@@ -54,76 +92,155 @@
             <button @click="tab = 'aktif'" 
                 :class="tab === 'aktif' ? 'tab-active' : ''"
                 class="px-6 py-3 bg-white cartoon-border rounded-xl font-black text-xs uppercase italic transition-all">
-                Sewa Aktif (2)
+                Sewa Aktif (<?= $aktif_count ?>)
             </button>
             <button @click="tab = 'selesai'" 
                 :class="tab === 'selesai' ? 'tab-active' : ''"
                 class="px-6 py-3 bg-white cartoon-border rounded-xl font-black text-xs uppercase italic hover:bg-slate-50 transition-all">
-                Riwayat Selesai
+                Riwayat Selesai (<?= $selesai_count ?>)
             </button>
         </div>
 
         <div x-show="tab === 'aktif'" class="space-y-6" x-transition.opacity>
-            <div class="bg-white cartoon-border cartoon-shadow rounded-[2.5rem] p-6 flex flex-col md:flex-row items-center gap-6 border-b-[8px]">
-                <div class="w-24 h-24 bg-blue-100 cartoon-border rounded-[1.5rem] flex items-center justify-center shrink-0">
-                    <i data-lucide="oven" class="w-12 h-12 text-blue-600"></i>
-                </div>
+            <?php if ($aktif_count > 0): ?>
+                <?php while ($row = mysqli_fetch_assoc($q_aktif)): ?>
+                    <?php 
+                        $inv = "INV-" . str_pad($row['idsewa'], 4, '0', STR_PAD_LEFT);
+                        $tampil_nama = $row['nama_alat'];
+                        if ($row['total_item'] > 1) {
+                            $tampil_nama .= " (+ " . ($row['total_item'] - 1) . " item lainnya)";
+                        }
+                        
+                        $is_pending = ($row['status'] == 'pending');
+                        $is_disewa = ($row['status'] == 'disewa');
+                        $is_qc = in_array(strtolower($row['status']), ['kembali', 'menunggu qc']);
+                    ?>
 
-                <div class="flex-1 text-center md:text-left">
-                    <div class="flex flex-wrap justify-center md:justify-start items-center gap-2 mb-2">
-                        <span class="bg-blue-100 text-blue-600 text-[9px] font-black px-3 py-1 rounded-full cartoon-border uppercase tracking-widest">Sedang Digunakan</span>
-                        <span class="text-[9px] font-black text-slate-400 uppercase italic">#INV-00325</span>
-                    </div>
-                    <h3 class="text-xl font-black uppercase italic text-slate-900">Oven Deck Manual - Gas</h3>
-                    <div class="flex items-center justify-center md:justify-start gap-4 mt-2">
-                        <div class="flex items-center gap-1.5">
-                            <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
-                            <span class="text-[10px] font-bold text-slate-500 uppercase">Deadline: 28 Mar</span>
+                    <?php if ($is_disewa): ?>
+                        <div class="bg-white cartoon-border cartoon-shadow rounded-[2.5rem] p-6 flex flex-col md:flex-row items-center gap-6 border-b-[8px]">
+                            <div class="w-24 h-24 bg-blue-100 cartoon-border rounded-[1.5rem] flex items-center justify-center shrink-0 overflow-hidden">
+                                <?php if($row['gambar']): ?>
+                                    <img src="../uploads/<?= $row['gambar'] ?>" class="w-full h-full object-cover">
+                                <?php else: ?>
+                                    <i data-lucide="package" class="w-12 h-12 text-blue-600"></i>
+                                <?php endif; ?>
+                            </div>
+
+                            <div class="flex-1 text-center md:text-left">
+                                <div class="flex flex-wrap justify-center md:justify-start items-center gap-2 mb-2">
+                                    <span class="bg-blue-100 text-blue-600 text-[9px] font-black px-3 py-1 rounded-full cartoon-border uppercase tracking-widest">Sedang Digunakan</span>
+                                    <span class="text-[9px] font-black text-slate-400 uppercase italic">#<?= $inv ?></span>
+                                </div>
+                                <h3 class="text-xl font-black uppercase italic text-slate-900"><?= $tampil_nama ?></h3>
+                                <div class="flex items-center justify-center md:justify-start gap-4 mt-2">
+                                    <div class="flex items-center gap-1.5">
+                                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-slate-400"></i>
+                                        <span class="text-[10px] font-bold text-slate-500 uppercase">Deadline: <?= date('d M Y', strtotime($row['tanggal_selesai'])) ?></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="w-full md:w-auto">
+                                <button @click="modalOpen = true; returnInv = '<?= $inv ?>'; returnName = '<?= addslashes($row['nama_alat']) ?>'"
+                                    class="w-full bg-red-700 text-white px-8 py-4 rounded-2xl cartoon-border cartoon-shadow-sm font-black text-xs uppercase italic hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all active:scale-95">
+                                    Kembalikan Alat
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="w-full md:w-auto">
-                    <button @click="modalOpen = true"
-                        class="w-full bg-red-700 text-white px-8 py-4 rounded-2xl cartoon-border cartoon-shadow-sm font-black text-xs uppercase italic hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all active:scale-95">
-                        Kembalikan Alat
-                    </button>
-                </div>
-            </div>
+                    <?php elseif ($is_pending): ?>
+                        <div class="bg-slate-50 cartoon-border rounded-[2.5rem] p-6 flex flex-col md:flex-row items-center gap-6 border-dashed">
+                            <div class="w-24 h-24 bg-slate-200 cartoon-border rounded-[1.5rem] flex items-center justify-center shrink-0 overflow-hidden">
+                                <?php if($row['gambar']): ?>
+                                    <img src="../uploads/<?= $row['gambar'] ?>" class="w-full h-full object-cover grayscale opacity-70">
+                                <?php else: ?>
+                                    <i data-lucide="hourglass" class="w-12 h-12 text-slate-500"></i>
+                                <?php endif; ?>
+                            </div>
+                            <div class="flex-1 text-center md:text-left">
+                                <div class="flex flex-wrap justify-center md:justify-start items-center gap-2 mb-2">
+                                    <span class="bg-orange-100 text-orange-600 text-[9px] font-black px-3 py-1 rounded-full cartoon-border uppercase animate-pulse italic">Menunggu Konfirmasi</span>
+                                    <span class="text-[9px] font-black text-slate-400 uppercase italic">#<?= $inv ?></span>
+                                </div>
+                                <h3 class="text-xl font-black uppercase italic text-slate-600 tracking-tighter"><?= $tampil_nama ?></h3>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase mt-1 italic leading-tight">Admin sedang memverifikasi pesanan Anda.</p>
+                            </div>
+                            <div class="w-full md:w-auto">
+                                <div class="px-6 py-4 bg-slate-200 cartoon-border rounded-2xl font-black text-[10px] text-slate-500 uppercase italic text-center">
+                                    PENDING
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="bg-slate-50 opacity-80 cartoon-border rounded-[2.5rem] p-6 flex flex-col md:flex-row items-center gap-6 border-dashed border-slate-300">
-                <div class="w-24 h-24 bg-white cartoon-border rounded-[1.5rem] flex items-center justify-center shrink-0 grayscale">
-                    <i data-lucide="blender" class="w-12 h-12 text-slate-400"></i>
+                    <?php elseif ($is_qc): ?>
+                        <div class="bg-slate-50 opacity-80 cartoon-border rounded-[2.5rem] p-6 flex flex-col md:flex-row items-center gap-6 border-dashed border-slate-300">
+                            <div class="w-24 h-24 bg-white cartoon-border rounded-[1.5rem] flex items-center justify-center shrink-0 grayscale overflow-hidden">
+                                <?php if($row['gambar']): ?>
+                                    <img src="../uploads/<?= $row['gambar'] ?>" class="w-full h-full object-cover">
+                                <?php else: ?>
+                                    <i data-lucide="search" class="w-12 h-12 text-slate-400"></i>
+                                <?php endif; ?>
+                            </div>
+                            <div class="flex-1 text-center md:text-left">
+                                <div class="flex flex-wrap justify-center md:justify-start items-center gap-2 mb-2">
+                                    <span class="bg-yellow-100 text-yellow-600 text-[9px] font-black px-3 py-1 rounded-full cartoon-border uppercase animate-pulse italic">Menunggu Validasi Admin</span>
+                                    <span class="text-[9px] font-black text-slate-400 uppercase italic">#<?= $inv ?></span>
+                                </div>
+                                <h3 class="text-xl font-black uppercase italic text-slate-400 tracking-tighter"><?= $tampil_nama ?></h3>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase mt-1 italic leading-tight">Unit sedang dalam pengecekan QC di gudang.</p>
+                            </div>
+                            <div class="w-full md:w-auto">
+                                <div class="px-6 py-4 bg-slate-200 cartoon-border rounded-2xl font-black text-[10px] text-slate-400 uppercase italic text-center">
+                                    PROSES QC
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                <?php endwhile; ?>
+            <?php else: ?>
+                <div class="text-center py-12 px-6 bg-white cartoon-border rounded-[2.5rem]">
+                    <i data-lucide="inbox" class="w-16 h-16 text-slate-300 mx-auto mb-4"></i>
+                    <h3 class="text-lg font-black uppercase italic text-slate-400">Belum ada aktivitas sewa</h3>
+                    <a href="dashboardUser.php" class="inline-block mt-4 bg-yellow-400 cartoon-border cartoon-shadow-sm px-6 py-3 rounded-xl font-black text-xs uppercase italic hover:bg-yellow-300 transition-all">Mulai Sewa Alat</a>
                 </div>
-                <div class="flex-1 text-center md:text-left">
-                    <div class="flex flex-wrap justify-center md:justify-start items-center gap-2 mb-2">
-                        <span class="bg-yellow-100 text-yellow-600 text-[9px] font-black px-3 py-1 rounded-full cartoon-border uppercase animate-pulse italic">Menunggu Validasi Admin</span>
-                    </div>
-                    <h3 class="text-xl font-black uppercase italic text-slate-400 tracking-tighter">Heavy Duty Blender</h3>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase mt-1 italic leading-tight">Unit sedang dalam pengecekan QC di gudang.</p>
-                </div>
-                <div class="w-full md:w-auto">
-                    <div class="px-6 py-4 bg-slate-200 cartoon-border rounded-2xl font-black text-[10px] text-slate-400 uppercase italic text-center">
-                        PROSES QC
-                    </div>
-                </div>
-            </div>
+            <?php endif; ?>
         </div>
 
         <div x-show="tab === 'selesai'" class="space-y-6" x-transition.opacity x-cloak>
-            <div class="bg-white cartoon-border rounded-[2.5rem] p-6 flex flex-col md:flex-row items-center gap-6 opacity-70 grayscale">
-                <div class="w-20 h-20 bg-slate-100 cartoon-border rounded-2xl flex items-center justify-center">
-                    <i data-lucide="check-circle" class="w-10 h-10 text-slate-400"></i>
+            <?php if ($selesai_count > 0): ?>
+                <?php while ($row = mysqli_fetch_assoc($q_selesai)): ?>
+                    <?php 
+                        $inv = "INV-" . str_pad($row['idsewa'], 4, '0', STR_PAD_LEFT);
+                        $tampil_nama = $row['nama_alat'];
+                        if ($row['total_item'] > 1) {
+                            $tampil_nama .= " (+ " . ($row['total_item'] - 1) . " item lainnya)";
+                        }
+                    ?>
+                    <div class="bg-white cartoon-border rounded-[2.5rem] p-6 flex flex-col md:flex-row items-center gap-6 opacity-70 grayscale">
+                        <div class="w-20 h-20 bg-slate-100 cartoon-border rounded-2xl flex items-center justify-center overflow-hidden">
+                            <?php if($row['gambar']): ?>
+                                <img src="../uploads/<?= $row['gambar'] ?>" class="w-full h-full object-cover">
+                            <?php else: ?>
+                                <i data-lucide="check-circle" class="w-10 h-10 text-slate-400"></i>
+                            <?php endif; ?>
+                        </div>
+                        <div class="flex-1 text-center md:text-left">
+                            <span class="text-[9px] font-black text-slate-400 uppercase italic">#<?= $inv ?></span>
+                            <h3 class="text-lg font-black uppercase italic text-slate-700 leading-none mb-1 mt-1"><?= $tampil_nama ?></h3>
+                            <p class="text-[10px] font-bold text-emerald-600 uppercase italic">Dikembalikan: <?= $row['tanggal_kembali'] ? date('d M Y', strtotime($row['tanggal_kembali'])) : date('d M Y', strtotime($row['tanggal_selesai'])) ?></p>
+                        </div>
+                        <a href="detailAlat.php?id=<?= $row['idalat'] ?>" class="w-full text-center md:w-auto bg-white cartoon-border cartoon-shadow-sm px-6 py-3 rounded-xl font-black text-[10px] uppercase italic hover:bg-yellow-300 transition-all">
+                            Sewa Lagi
+                        </a>
+                    </div>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <div class="text-center py-12 px-6 bg-white cartoon-border rounded-3xl">
+                    <i data-lucide="archive" class="w-16 h-16 text-slate-300 mx-auto mb-4"></i>
+                    <h3 class="text-lg font-black uppercase italic text-slate-400">Riwayat kosong</h3>
                 </div>
-                <div class="flex-1 text-center md:text-left">
-                    <span class="text-[9px] font-black text-slate-400 uppercase italic">#INV-00210</span>
-                    <h3 class="text-lg font-black uppercase italic text-slate-700 leading-none mb-1">Planetary Mixer 20L</h3>
-                    <p class="text-[10px] font-bold text-emerald-600 uppercase italic">Dikembalikan: 12 Feb 2026</p>
-                </div>
-                <button class="w-full md:w-auto bg-white cartoon-border cartoon-shadow-sm px-6 py-3 rounded-xl font-black text-[10px] uppercase italic hover:bg-yellow-300 transition-all">
-                    Sewa Lagi
-                </button>
-            </div>
+            <?php endif; ?>
         </div>
 
         <div class="mt-12 bg-white cartoon-border border-dashed p-6 rounded-[2rem] flex items-start gap-4">
@@ -154,7 +271,7 @@
                     OKE, SIAP!
                 </button>
 
-                <a href="https://wa.me/6287776600292?text=*Halo%20Admin%20SewaIn%2C%20saya%20butuh%20bantuan%20penjemputan%20alat%20untuk%20unit%20Oven%20Deck%20Manual%20dengan%20nomor%20Invoice%20%23INV-00325.%20Terima%20kasih.*" 
+                <a :href="'https://wa.me/6287776600292?text=' + encodeURIComponent('*Halo Admin SewaIn, saya butuh bantuan penjemputan alat untuk unit ' + returnName + ' dengan nomor Invoice #' + returnInv + '*. Terima kasih.')" 
                    target="_blank"
                    class="w-full bg-white border-2 border-black py-4 rounded-2xl flex items-center justify-center gap-2 font-black text-xs uppercase italic hover:bg-slate-50 transition-all shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none">
                     BUTUH JEMPUTAN
