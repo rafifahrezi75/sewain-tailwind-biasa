@@ -1,4 +1,5 @@
 <?php
+    include 'auth_check.php';
     include '../config.php';
 
     // Handler Create Pengembalian
@@ -152,6 +153,18 @@
                         <i class='bx bx-menu text-2xl'></i>
                     </button>
                     <span class="text-lg font-medium text-white">Pengembalian Alat</span>
+                </div>
+
+                <div class="flex items-center gap-3 sm:gap-5 text-white">
+                    <div class="flex items-center gap-3 pl-3 sm:pl-5 relative before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-8 before:w-px before:bg-brand-400">
+                        <div class="hidden sm:flex flex-col text-right justify-center">
+                            <span class="text-sm font-semibold leading-tight"><?= htmlspecialchars($_SESSION['nama']) ?></span>
+                            <span class="text-[10px] text-brand-400 font-medium mt-0.5 uppercase tracking-wider">SEWAIN</span>
+                        </div>
+                        <button class="h-9 w-9 overflow-hidden rounded-full bg-white/10 hover:bg-white/20 border border-white/20 transition flex items-center justify-center focus:outline-none">
+                            <i class='bx bx-user text-xl text-white'></i>
+                        </button>
+                    </div>
                 </div>
             </header>
 
