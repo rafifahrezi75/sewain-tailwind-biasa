@@ -110,30 +110,42 @@
             class="fixed inset-y-0 left-0 z-50 flex flex-col bg-brand-500 text-white transition-all duration-300 ease-in-out md:static md:block shrink-0 shadow-xl"
             :class="sidebarOpen ? 'w-64 translate-x-0' : '-translate-x-full md:translate-x-0 md:w-20'">
             
+            <!-- Sidebar Header -->
             <div class="flex h-[72px] items-center justify-center px-4 shrink-0 font-bold tracking-wider">
+                <!-- Full Logo -->
                 <h1 x-show="sidebarOpen" class="text-2xl w-full text-center" x-transition.opacity>Admin</h1>
+                <!-- Mini Logo -->
                 <h1 x-show="!sidebarOpen" class="text-2xl hidden md:block" x-cloak>A</h1>
             </div>
 
+            <!-- Sidebar Nav -->
             <nav class="flex-1 space-y-2 overflow-y-auto px-3 py-4 scrollbar-hide">
+
                 <a href="kategori.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-layer text-xl shrink-0 opacity-80"></i>
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Kategori</span>
                 </a>
+
                 <a href="alat.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none bg-white text-brand-700 shadow-sm" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-wrench text-xl shrink-0"></i>
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Alat Produksi</span>
                     <div x-show="sidebarOpen" class="ml-auto flex h-2 w-2 shrink-0 rounded-full bg-brand-500"></div>
                 </a>
+
                 <a href="transaksi.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-shopping-bag text-xl shrink-0 opacity-80"></i>
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Daftar Transaksi</span>
                 </a>
-                <a href="pengembalianAdmin.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+
+                <a href="pengembalianAdmin.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all text-white hover:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-archive-in text-xl shrink-0 opacity-80"></i>
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Pengembalian</span>
                 </a>
 
+
+            </nav>
+
+            <!-- Sidebar Footer -->
             <div class="p-4" :class="sidebarOpen ? '' : 'md:px-2'">
                 <a href="#" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-white transition-all hover:bg-brand-600 focus:outline-none" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class='bx bx-log-out text-xl shrink-0 opacity-80'></i>
