@@ -147,7 +147,7 @@
 
             <!-- Sidebar Footer -->
             <div class="p-4" :class="sidebarOpen ? '' : 'md:px-2'">
-                <a href="#" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-white transition-all hover:bg-brand-600 focus:outline-none" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                <a href="../logout.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-white transition-all hover:bg-brand-600 focus:outline-none" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class='bx bx-log-out text-xl shrink-0 opacity-80'></i>
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Logout</span>
                 </a>
@@ -400,7 +400,7 @@
                         <!-- MODAL TAMBAH SPEK    -->
                         <!-- ==================== -->
                         <div x-show="modalTambah"
-                             class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+                         class="fixed inset-0 z-100 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
                              x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                              x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
                              x-cloak>
@@ -441,7 +441,7 @@
                         <!-- MODAL EDIT SPEK      -->
                         <!-- ==================== -->
                         <div x-show="modalEdit"
-                             class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+                             class="fixed inset-0 z-100 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
                              x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                              x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
                              x-cloak>
@@ -545,7 +545,7 @@
                         </div>
 
                         <div x-show="modalFoto"
-                             class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+                             class="fixed inset-0 z-100 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
                              x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                              x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
                              x-cloak>
