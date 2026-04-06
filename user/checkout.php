@@ -199,12 +199,12 @@ $user_data = mysqli_fetch_assoc($query_user);
                         </div>
                         <div class="grid grid-cols-2 gap-3">
                             <label class="cursor-pointer">
-                                <input type="radio" name="metode_pengiriman" value="Ambil Sendiri" class="hidden peer" checked onchange="updateShipMethod('pickup')">
+                                <input type="radio" name="metode_pengiriman" value="ambil" class="hidden peer" checked onchange="updateShipMethod('pickup')">
                                 <div class="p-3 border-2 border-slate-100 rounded-2xl text-center peer-checked:border-aksen peer-checked:bg-teal-50 transition-all font-black text-[10px] uppercase italic text-slate-400 peer-checked:text-aksen">
                                     Ambil Sendiri</div>
                             </label>
                             <label class="cursor-pointer">
-                                <input type="radio" name="metode_pengiriman" value="Antar Lokasi" class="hidden peer" onchange="updateShipMethod('delivery')">
+                                <input type="radio" name="metode_pengiriman" value="antar" class="hidden peer" onchange="updateShipMethod('delivery')">
                                 <div class="p-3 border-2 border-slate-100 rounded-2xl text-center peer-checked:border-aksen peer-checked:bg-teal-50 transition-all font-black text-[10px] uppercase italic text-slate-400 peer-checked:text-aksen">
                                     Antar Lokasi</div>
                             </label>
