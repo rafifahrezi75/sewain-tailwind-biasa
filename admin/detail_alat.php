@@ -210,39 +210,30 @@
 
                         <div class="flex flex-col md:flex-row">
                             <!-- Image Section -->
-                            <div class="md:w-5/12 relative flex items-center justify-center min-h-[320px] bg-gradient-to-br from-gray-50 to-gray-100 border-r border-gray-100 overflow-hidden p-8">
-                                <!-- Decorative circle behind image -->
+                            <div class="md:w-1/2 relative flex items-center justify-center aspect-square bg-gradient-to-br from-gray-50 to-gray-100 border-r border-gray-100 overflow-hidden p-8">
+                                <!-- Decorative circle -->
                                 <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                                    <div class="h-64 w-64 rounded-full bg-brand-100/30"></div>
+                                    <div class="h-56 w-56 rounded-full bg-brand-100/30"></div>
                                 </div>
+
                                 <?php if ($data['gambar']): ?>
                                     <img src="../uploads/<?php echo htmlspecialchars($data['gambar']); ?>" 
-                                         alt="<?php echo htmlspecialchars($data['nama_alat']); ?>" 
-                                         class="relative z-10 w-full h-auto object-contain max-h-[360px] drop-shadow-xl transition-transform duration-500 hover:scale-105">
+                                        alt="<?php echo htmlspecialchars($data['nama_alat']); ?>" 
+                                        class="relative z-10 w-[180px] aspect-square object-cover mx-auto rounded-2xl shadow-lg transition-transform duration-300 hover:scale-105">
                                 <?php else: ?>
                                     <div class="relative z-10 flex flex-col items-center text-gray-300">
                                         <i class="bx bx-image text-8xl"></i>
                                         <span class="text-sm font-medium mt-2 text-gray-400">Tidak ada gambar</span>
                                     </div>
                                 <?php endif; ?>
-                                <!-- Status floating badge -->
-                                <?php if($data['status'] == 'tersedia'): ?>
-                                    <span class="absolute top-4 left-4 z-20 inline-flex items-center gap-1.5 rounded-xl bg-emerald-500 px-3 py-1.5 text-[11px] font-bold text-white shadow-md tracking-wider uppercase">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-white animate-pulse"></span> Tersedia
-                                    </span>
-                                <?php else: ?>
-                                    <span class="absolute top-4 left-4 z-20 inline-flex items-center gap-1.5 rounded-xl bg-red-500 px-3 py-1.5 text-[11px] font-bold text-white shadow-md tracking-wider uppercase">
-                                        <span class="h-1.5 w-1.5 rounded-full bg-white"></span> Kosong
-                                    </span>
-                                <?php endif; ?>
                             </div>
 
                             <!-- Info Section -->
-                            <div class="md:w-7/12 p-8 lg:p-12 flex flex-col gap-8 bg-white">
+                            <div class="md:w-1/2 p-8 lg:p-12 flex flex-col gap-8 bg-white">
                                 <div>
-                                    <span style="display:inline-flex; align-items:center; gap:10px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:12px; padding:6px 14px; font-size:11px; font-weight:700; color:#1d4ed8; letter-spacing:0.1em; text-transform:uppercase; box-shadow:0 1px 2px rgba(0,0,0,0.05);">
-                                        <span style="display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; background:#dbeafe; border-radius:50%; flex-shrink:0;">
-                                            <i class='bx <?php echo !empty($data['icon']) ? htmlspecialchars($data['icon']) : 'bx-layer'; ?>' style="font-size:13px; color:#2563eb;"></i>
+                                    <span class="inline-flex items-center gap-2.5 bg-blue-50 border border-blue-200 rounded-xl px-3.5 py-1.5 text-[11px] font-bold text-blue-700 tracking-widest uppercase shadow-sm">
+                                        <span class="inline-flex items-center justify-center w-5.5 h-5.5 bg-blue-100 rounded-full shrink-0">
+                                            <i class='bx <?php echo !empty($data['icon']) ? htmlspecialchars($data['icon']) : 'bx-layer'; ?> text-[13px] text-blue-600'></i>
                                         </span>
                                         <?php echo htmlspecialchars($data['kategori']); ?>
                                     </span>
@@ -409,10 +400,10 @@
                         <!-- MODAL TAMBAH SPEK    -->
                         <!-- ==================== -->
                         <div x-show="modalTambah"
-                             class="fixed inset-0 z-60 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+                             class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
                              x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                              x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                             style="display:none;">
+                             x-cloak>
                             <div @click.outside="modalTambah = false"
                                  class="w-full max-w-md rounded-2xl bg-white shadow-xl ring-1 ring-gray-200/50"
                                  x-show="modalTambah"
@@ -450,10 +441,10 @@
                         <!-- MODAL EDIT SPEK      -->
                         <!-- ==================== -->
                         <div x-show="modalEdit"
-                             class="fixed inset-0 z-60 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+                             class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
                              x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                              x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                             style="display:none;">
+                             x-cloak>
                             <div @click.outside="modalEdit = false"
                                  class="w-full max-w-md rounded-2xl bg-white shadow-xl ring-1 ring-gray-200/50"
                                  x-show="modalEdit"
@@ -520,23 +511,23 @@
                                 <?php if (mysqli_num_rows($query_foto) > 0): ?>
                                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                                     <?php while ($foto = mysqli_fetch_assoc($query_foto)): ?>
-                                    <div style="position:relative; overflow:hidden; border-radius:1rem; background:#f3f4f6; aspect-ratio:1/1; box-shadow:0 1px 3px rgba(0,0,0,.12);">
+                                    <div class="relative overflow-hidden rounded-2xl bg-gray-100 aspect-square shadow-sm">
                                         <img src="../uploads/<?php echo htmlspecialchars($foto['fotodetail']); ?>"
                                              alt="Foto Detail"
-                                             style="width:100%; height:100%; object-fit:cover; display:block;">
+                                             class="w-full h-full object-cover block">
 
                                         <!-- Tombol Lihat — pojok kiri atas -->
                                         <a href="../uploads/<?php echo htmlspecialchars($foto['fotodetail']); ?>" target="_blank"
                                            title="Lihat Asli"
-                                           style="position:absolute; top:8px; left:8px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.55); border-radius:8px; color:#fff; text-decoration:none; z-index:5;">
-                                            <i class='bx bx-expand-alt' style="font-size:14px;"></i>
+                                           class="absolute top-3 left-3 z-20 w-8 h-8 flex items-center justify-center bg-gray-900 rounded-xl text-gray-600 no-underline shadow-md transition-all hover:scale-110">
+                                            <i class='bx bx-expand-alt text-base'></i>
                                         </a>
 
                                         <!-- Tombol Hapus — pojok kanan atas -->
                                         <button type="button" onclick="hapusFoto('<?php echo $foto['idfotodetail']; ?>')"
                                                 title="Hapus Foto"
-                                                style="position:absolute; top:8px; right:8px; width:28px; height:28px; display:flex; align-items:center; justify-content:center; background:#ef4444; border:none; border-radius:8px; color:#fff; cursor:pointer; z-index:5;">
-                                            <i class='bx bx-trash' style="font-size:14px;"></i>
+                                                class="absolute top-3 right-3 z-20 w-8 h-8 flex items-center justify-center bg-red-600 rounded-xl text-gray-600 shadow-sm transition-all hover:scale-110 cursor-pointer">
+                                            <i class='bx bx-trash text-base'></i>
                                         </button>
                                     </div>
 
@@ -554,10 +545,10 @@
                         </div>
 
                         <div x-show="modalFoto"
-                             class="fixed inset-0 z-60 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+                             class="fixed inset-0 z-[100] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
                              x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
                              x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                             style="display:none;">
+                             x-cloak>
                             <div @click.outside="modalFoto = false; fotoPreview = '';"
                                  class="w-full max-w-md rounded-2xl bg-white shadow-xl ring-1 ring-gray-200/50"
                                  x-show="modalFoto"

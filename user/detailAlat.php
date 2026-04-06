@@ -362,29 +362,33 @@ if ($alatdb) {
             input.value = val;
         }
 
+        function tampilkanPesanLogin() {
+            const toast = document.createElement('div');
+            toast.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[301] bg-white cartoon-border cartoon-shadow p-10 flex flex-col items-center gap-6 text-center animate-bounce w-full max-w-[400px]";
+            toast.innerHTML = `
+                <div class="w-20 h-20 bg-primary cartoon-border rounded-full flex items-center justify-center text-white cartoon-shadow-sm">
+                    <i data-lucide="lock" class="w-10 h-10"></i>
+                </div>
+                <div>
+                    <h4 class="font-black text-xl uppercase italic mb-2">Akses Terbatas!</h4>
+                    <p class="text-xs font-bold text-slate-500 uppercase tracking-tight italic">Silakan Masuk Terlebih Dahulu Untuk Melanjutkan Transaksi</p>
+                </div>
+                <div class="flex flex-col gap-2 w-full">
+                    <div class="bg-yellow-300 cartoon-border px-4 py-2 font-black text-[10px] uppercase italic">Mengalihkan ke halaman login...</div>
+                </div>
+            `;
+            document.body.appendChild(toast);
+            lucide.createIcons();
+            setTimeout(() => window.location.href = '../login.php', 2000);
+        }
+
         // Tombol TAMBAH KE KERANJANG (Biasa)
         function tambahKeKeranjang() {
             const qty = parseInt(document.getElementById('detailQtyInput').value);
             const userData = JSON.parse(localStorage.getItem('userSewaIn'));
             
             if (!userData || !userData.isLogin) {
-                const toast = document.createElement('div');
-                toast.className = "fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[301] bg-white cartoon-border cartoon-shadow p-10 flex flex-col items-center gap-6 text-center animate-bounce w-full max-w-[400px]";
-                toast.innerHTML = `
-                    <div class="w-20 h-20 bg-primary cartoon-border rounded-full flex items-center justify-center text-white cartoon-shadow-sm">
-                        <i data-lucide="lock" class="w-10 h-10"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-black text-xl uppercase italic mb-2">Akses Terbatas!</h4>
-                        <p class="text-xs font-bold text-slate-500 uppercase tracking-tight italic">Silakan Masuk Terlebih Dahulu Untuk Menambahkan ke Keranjang</p>
-                    </div>
-                    <div class="flex flex-col gap-2 w-full">
-                        <div class="bg-yellow-300 cartoon-border px-4 py-2 font-black text-[10px] uppercase italic">Mengalihkan ke halaman login...</div>
-                    </div>
-                `;
-                document.body.appendChild(toast);
-                lucide.createIcons();
-                setTimeout(() => window.location.href = '../login.php', 2000);
+                tampilkanPesanLogin();
                 return;
             }
 
@@ -424,12 +428,31 @@ if ($alatdb) {
         // Tombol SEWA SEKARANG (Jalur Cepat)
         function sewaSekarangLangsung() {
             const qty = parseInt(document.getElementById('detailQtyInput').value);
-            const produkSingle = [{ ...currentAlat, qty: qty, durasi: 1 }];
+            const userData = JSON.parse(localStorage.getItem('userSewaIn'));
+            
+            if (!userData || !userData.isLogin) {
+                tampilkanPesanLogin();
+                return;
+            }
 
-            localStorage.setItem('checkout_cepat', JSON.stringify(produkSingle));
-            localStorage.setItem('mode_checkout', 'langsung'); // SET PENANDA DI SINI
-
-            window.location.href = 'checkout.php';
+            // Langsung eksekusi ke DB via AJAX
+            fetch('add_to_cart.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `idalat=<?= $id_alat ?>&jumlah=${qty}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    window.location.href = 'checkout.php';
+                } else {
+                    alert(data.message || 'Gagal menyiapkan checkout');
+                }
+            })
+            .catch(err => {
+                console.error("Direct checkout logic failed:", err);
+                alert('Kesalahan jaringan saat checkout');
+            });
         }
 
         function logout() {

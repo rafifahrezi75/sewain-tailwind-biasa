@@ -38,6 +38,10 @@ while($item = mysqli_fetch_assoc($query_detail)) {
     $items_list .= "- " . $item['nama_alat'] . " (" . $item['jumlah'] . " Unit)\n";
 }
 
+// Defensive checks for potentially empty data
+$metode = !empty($data_sewa['metode_pengiriman']) ? $data_sewa['metode_pengiriman'] : 'Ambil Sendiri';
+$durasi = !empty($data_sewa['durasi']) ? $data_sewa['durasi'] : '1';
+
 $wa_number = "6287776600292";
 $msg_template = "*HALO ADMIN SEWAIN!*\n\n"
               . "SAYA TELAH MELAKUKAN PEMESANAN BARU:\n"
@@ -59,8 +63,8 @@ $msg_full = sprintf(
     $data_sewa['notelp'],
     $data_sewa['tanggal_mulai'],
     $data_sewa['tanggal_selesai'],
-    $data_sewa['durasi'],
-    $data_sewa['metode_pengiriman'],
+    $durasi,
+    $metode,
     number_format($data_sewa['total_biaya'], 0, ',', '.')
 );
 
