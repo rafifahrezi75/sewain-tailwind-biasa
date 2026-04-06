@@ -49,7 +49,15 @@
 
         if (mysqli_query($conn, $insert_query)) {
             mysqli_query($conn, "UPDATE penyewaan SET status = 'selesai' WHERE idsewa = '$id_sewa'");
-            header("Location: pengembalianAdmin.php?pesan=berhasil");
+            
+            // Ambil data user untuk notif WA
+            $q_user_notif = mysqli_query($conn, "SELECT u.nama, u.notelp FROM penyewaan s JOIN user u ON s.iduser = u.id_user WHERE s.idsewa = '$id_sewa'");
+            $d_user_notif = mysqli_fetch_assoc($q_user_notif);
+            $wa_num = $d_user_notif['notelp'];
+            $nama_u = urlencode($d_user_notif['nama']);
+            $inv_l = str_pad($id_sewa, 4, '0', STR_PAD_LEFT);
+
+            header("Location: pengembalianAdmin.php?pesan=berhasil&wa=$wa_num&nama=$nama_u&total=$total_denda&inv=$inv_l");
             exit;
         } else {
             echo "Error inserting pengembalian: " . mysqli_error($conn);
@@ -369,9 +377,9 @@
                 </div>
 
                 <div class="flex flex-col sm:flex-row-reverse gap-3 pt-2">
-                    <button type="submit" name="simpan_pengembalian" @click="kirimWA(selectedData, denda_kerusakan)"
+                    <button type="submit" name="simpan_pengembalian"
                         class="flex-1 bg-brand-500 text-white px-5 py-2.5 rounded-xl font-medium text-sm hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 transition-all flex items-center justify-center gap-2 shadow-sm">
-                        <i class='bx bxl-whatsapp text-lg'></i>
+                        <i class='bx bx-check-circle text-lg'></i>
                         Validasi & Selesaikan
                     </button>
                     <button type="button" @click="qcModalOpen = false" class="flex-none px-6 py-2.5 text-sm font-medium text-gray-600 bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-200 focus:ring-offset-2">
@@ -382,7 +390,6 @@
         </div>
     </div>
 
-    <!-- Script Alert & Notifikasi WA -->
     <script>
         <?php if (isset($_GET['pesan']) && $_GET['pesan'] == 'berhasil'): ?>
         Swal.fire({ 
@@ -390,29 +397,39 @@
             title: 'Berhasil!', 
             text: 'Pengembalian berhasil divalidasi dan tersimpan.', 
             showConfirmButton: false, 
-            timer: 2500 
+            timer: 2000 
         });
-        window.history.replaceState(null, null, 'pengembalianAdmin.php');
+
+        // Hapus query params dari URL agar tidak trigger berulang saat refresh
+        const url_clean = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.replaceState({path:url_clean}, '', url_clean);
+
+        // Notif WA Otomatis jika parameter ada
+        <?php if (isset($_GET['wa'])): ?>
+            (function() {
+                const wa = "<?= $_GET['wa'] ?>";
+                const nama = "<?= htmlspecialchars($_GET['nama']) ?>";
+                const total = parseInt("<?= $_GET['total'] ?>") || 0;
+                const inv = "<?= $_GET['inv'] ?>";
+                
+                let pesan = `*KONFIRMASI PENGEMBALIAN UNIT*\n\nHalo *${nama}*,\nLaporan pengembalian alat Anda telah kami terima dan divalidasi.\n\n*Nomor Invoice:* #${inv}\n`;
+                
+                if (total > 0) {
+                    pesan += `*Total Denda:* Rp ${total.toLocaleString('id-ID')}\n_(Termasuk denda keterlambatan dan biaya perbaikan fisik/kebersihan jika ada)_\n\nMohon selesaikan pelunasan secara langsung di kasir atau via transfer bank.\n\n`;
+                } else {
+                    pesan += `*Status:* Alat Kembali dalam Kondisi Aman dan Lengkap (Tanpa Denda Tambahan)\n\n`;
+                }
+                pesan += `Terima kasih!`;
+
+                // Format nomor WA agar valid (mengganti 0 di depan dengan 62)
+                let finalWa = wa.replace(/^0/, '62').replace(/[^\d]/g, '');
+                
+                setTimeout(() => {
+                    window.open(`https://wa.me/${finalWa}?text=${encodeURIComponent(pesan)}`, '_blank');
+                }, 1000); // Tunggu sebentar agar Swal terlihat
+            })();
         <?php endif; ?>
-
-        function kirimWA(data, ekstraDendaVal) {
-            const numEkstra = parseInt(ekstraDendaVal) || 0;
-            const totalDenda = data.dendaTelatRaw + numEkstra;
-            
-            let pesan = `*KONFIRMASI PENGEMBALIAN UNIT*\n\nHalo *${data.user}*,\nLaporan pengembalian alat Anda telah kami terima dan divalidasi.\n\n📌 *Nomor Invoice:* ${data.id_sewa_label}\n`;
-            
-            if (totalDenda > 0) {
-                pesan += `⚠️ *Total Denda:* Rp ${totalDenda.toLocaleString('id-ID')}\n_(Termasuk denda keterlambatan dan biaya perbaikan fisik/kebersihan jika ada)_\n\nMohon selesaikan pelunasan secara langsung di kasir atau via transfer bank.\n\n`;
-            } else {
-                pesan += `✅ *Status:* Alat Kembali dalam Kondisi Aman dan Lengkap (Tanpa Denda Tambahan)\n\n`;
-            }
-            pesan += `Terima kasih!`;
-
-            // Timeout sejenak agar window.open tidak mengeblock submit form
-            setTimeout(() => {
-                window.open(`https://wa.me/${data.wa}?text=${encodeURIComponent(pesan)}`, '_blank');
-            }, 100);
-        }
+        <?php endif; ?>
     </script>
 </body>
 </html>
