@@ -191,7 +191,7 @@
                                                 if($row['status'] == 'pending') $statusColor = "orange";
                                                 elseif($row['status'] == 'disewa') $statusColor = "blue";
                                                 elseif($row['status'] == 'selesai') $statusColor = "green";
-                                                elseif($row['status'] == 'batal') $statusColor = "red";
+                                                elseif($row['status'] == 'dibatalkan') $statusColor = "red";
                                             ?>
                                             <tr class="hover:bg-gray-50/50 transition-colors">
                                                 <td class="px-6 py-4">
@@ -324,7 +324,7 @@
                             <span class="text-sm font-semibold text-green-600">Selesai</span>
                         </label>
                         <label class="relative flex cursor-pointer items-center gap-3 rounded-xl border border-gray-200 p-3 transition hover:bg-gray-50 has-[:checked]:border-red-500 has-[:checked]:bg-red-50">
-                            <input type="radio" name="status_baru" value="batal" :checked="statusData.current == 'batal'" class="accent-red-500">
+                            <input type="radio" name="status_baru" value="dibatalkan" :checked="statusData.current == 'dibatalkan'" class="accent-red-500">
                             <span class="text-sm font-semibold text-red-600">Dibatalkan</span>
                         </label>
                     </div>
