@@ -101,7 +101,7 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<body class="bg-[#f8f9fa] font-sans text-gray-800 antialiased" x-data="{ sidebarOpen: true }">
+<body class="bg-[#f8f9fa] font-sans text-gray-800 antialiased" x-data="{ sidebarOpen: true, modalTambah: false, modalEdit: false, editData: { id: '', spek: '', iconspek: '', satuan: '' }, modalFoto: false, fotoPreview: '', fotoName: '' }">
 
     <div class="flex h-screen overflow-hidden">
         
@@ -210,7 +210,7 @@
 
                         <div class="flex flex-col md:flex-row">
                             <!-- Image Section -->
-                            <div class="md:w-1/2 relative flex items-center justify-center aspect-square bg-gradient-to-br from-gray-50 to-gray-100 border-r border-gray-100 overflow-hidden p-8">
+                            <div class="md:w-1/2 relative isolate flex items-center justify-center aspect-square bg-gradient-to-br from-gray-50 to-gray-100 border-r border-gray-100 overflow-hidden p-8">
                                 <!-- Decorative circle -->
                                 <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
                                     <div class="h-56 w-56 rounded-full bg-brand-100/30"></div>
@@ -304,7 +304,7 @@
                         </div>
                     </div>
 
-                    <div x-data="{ modalTambah: false, modalEdit: false, editData: { id: '', spek: '', iconspek: '', satuan: '' } }">
+                    <div>
 
                         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 overflow-hidden">
                             <!-- Table Header -->
@@ -396,92 +396,10 @@
                             </div>
                         </div>
 
-                        <!-- ==================== -->
-                        <!-- MODAL TAMBAH SPEK    -->
-                        <!-- ==================== -->
-                        <div x-show="modalTambah"
-                         class="fixed inset-0 z-100 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
-                             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                             x-cloak>
-                            <div @click.outside="modalTambah = false"
-                                 class="w-full max-w-md rounded-2xl bg-white shadow-xl ring-1 ring-gray-200/50"
-                                 x-show="modalTambah"
-                                 x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
-                                <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
-                                    <h3 class="text-base font-bold text-gray-800">Tambah Spesifikasi</h3>
-                                    <button @click="modalTambah = false" class="rounded-lg p-1 text-gray-400 hover:bg-gray-100 transition focus:outline-none">
-                                        <i class='bx bx-x text-2xl'></i>
-                                    </button>
-                                </div>
-                                <form action="detail_alat.php?id=<?php echo $id; ?>" method="POST" class="p-6 space-y-4">
-                                    <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700">Nama Spesifikasi</label>
-                                        <input type="text" name="spek" required placeholder="Contoh: Daya Listrik, Berat, Dimensi..." class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
-                                    </div>
-                                    <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700">Icon Boxicons <span class="text-gray-400 font-normal">(opsional)</span></label>
-                                        <input type="text" name="iconspek" placeholder="Contoh: bx-bolt-circle, bx-chip, bx-cog" class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
-                                        <p class="mt-1 text-[11px] text-gray-400">Cari nama icon di <a href="https://boxicons.com/icons?free=true" target="_blank" class="text-brand-500 underline">boxicons.com</a></p>
-                                    </div>
-                                    <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700">Satuan / Nilai</label>
-                                        <input type="text" name="satuan" required placeholder="Contoh: 220V, 5 kg, 30x40 cm..." class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
-                                    </div>
-                                    <div class="flex gap-3 justify-end pt-2">
-                                        <button type="button" @click="modalTambah = false" class="rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">Batal</button>
-                                        <button type="submit" name="simpan_spek" class="rounded-xl bg-brand-500 px-5 py-2 text-sm font-medium text-white hover:bg-brand-600 shadow-sm focus:outline-none">Simpan</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <!-- ==================== -->
-                        <!-- MODAL EDIT SPEK      -->
-                        <!-- ==================== -->
-                        <div x-show="modalEdit"
-                             class="fixed inset-0 z-100 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
-                             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                             x-cloak>
-                            <div @click.outside="modalEdit = false"
-                                 class="w-full max-w-md rounded-2xl bg-white shadow-xl ring-1 ring-gray-200/50"
-                                 x-show="modalEdit"
-                                 x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
-                                <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
-                                    <h3 class="text-base font-bold text-gray-800">Edit Spesifikasi</h3>
-                                    <button @click="modalEdit = false" class="rounded-lg p-1 text-gray-400 hover:bg-gray-100 transition focus:outline-none">
-                                        <i class='bx bx-x text-2xl'></i>
-                                    </button>
-                                </div>
-                                <form action="detail_alat.php?id=<?php echo $id; ?>" method="POST" class="p-6 space-y-4">
-                                    <input type="hidden" name="idspek" :value="editData.id">
-                                    <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700">Nama Spesifikasi</label>
-                                        <input type="text" name="spek" :value="editData.spek" required placeholder="Contoh: Daya Listrik..." class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
-                                    </div>
-                                    <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700">Icon Boxicons <span class="text-gray-400 font-normal">(opsional)</span></label>
-                                        <input type="text" name="iconspek" :value="editData.iconspek" placeholder="Contoh: bx-bolt-circle, bx-chip, bx-cog" class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
-                                        <p class="mt-1 text-[11px] text-gray-400">Cari nama icon di <a href="https://boxicons.com/icons?free=true" target="_blank" class="text-brand-500 underline">boxicons.com</a></p>
-                                    </div>
-                                    <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700">Satuan / Nilai</label>
-                                        <input type="text" name="satuan" :value="editData.satuan" required placeholder="Contoh: 220V..." class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
-                                    </div>
-                                    <div class="flex gap-3 justify-end pt-2">
-                                        <button type="button" @click="modalEdit = false" class="rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">Batal</button>
-                                        <button type="submit" name="update_spek" class="rounded-xl bg-brand-500 px-5 py-2 text-sm font-medium text-white hover:bg-brand-600 shadow-sm focus:outline-none">Perbarui</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
 
                     </div>
 
-                    <div x-data="{ modalFoto: false, fotoPreview: '', fotoName: '' }">
+                    <div>
 
                         <div class="bg-white rounded-2xl shadow-sm ring-1 ring-gray-100 overflow-hidden">
                             <!-- Header -->
@@ -541,66 +459,6 @@
                                     <p class="text-xs text-gray-300 mt-1">Klik <strong class="text-brand-500">+ Tambah Foto</strong> untuk mengunggah.</p>
                                 </div>
                                 <?php endif; ?>
-                            </div>
-                        </div>
-
-                        <div x-show="modalFoto"
-                             class="fixed inset-0 z-100 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
-                             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
-                             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
-                             x-cloak>
-                            <div @click.outside="modalFoto = false; fotoPreview = '';"
-                                 class="w-full max-w-md rounded-2xl bg-white shadow-xl ring-1 ring-gray-200/50"
-                                 x-show="modalFoto"
-                                 x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
-                                 x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
-                                <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
-                                    <h3 class="text-base font-bold text-gray-800">Tambah Foto Detail</h3>
-                                    <button @click="modalFoto = false; fotoPreview = '';" class="rounded-lg p-1 text-gray-400 hover:bg-gray-100 transition focus:outline-none">
-                                        <i class='bx bx-x text-2xl'></i>
-                                    </button>
-                                </div>
-                                <form action="detail_alat.php?id=<?php echo $id; ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
-                                    <div>
-                                        <label class="mb-1.5 block text-sm font-medium text-gray-700">File Foto</label>
-                                        <!-- Upload Area -->
-                                        <div class="relative mt-1 flex justify-center rounded-2xl border-2 border-dashed border-gray-200 px-6 py-8 transition-colors hover:bg-gray-50 overflow-hidden">
-                                            <!-- Preview -->
-                                            <template x-if="fotoPreview">
-                                                <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white p-3">
-                                                    <img :src="fotoPreview" class="max-h-40 max-w-full rounded-xl object-contain shadow-sm mb-2">
-                                                    <p class="text-xs font-semibold text-gray-600 truncate max-w-full" x-text="fotoName"></p>
-                                                    <button type="button" @click="fotoPreview = ''; fotoName = ''; document.getElementById('input-foto').value = '';" 
-                                                            class="mt-2 text-xs text-red-500 hover:underline focus:outline-none">Ganti foto</button>
-                                                </div>
-                                            </template>
-                                            <!-- Default state -->
-                                            <div class="text-center" x-show="!fotoPreview">
-                                                <i class='bx bx-cloud-upload text-4xl text-gray-300'></i>
-                                                <div class="mt-3 flex text-sm text-gray-500 justify-center">
-                                                    <label for="input-foto" class="cursor-pointer font-semibold text-brand-500 hover:text-brand-600 focus-within:outline-none">
-                                                        <span>Pilih file</span>
-                                                        <input id="input-foto" name="fotodetail" type="file" accept="image/*" required class="sr-only"
-                                                               @change="
-                                                                   if ($event.target.files.length) {
-                                                                       fotoName = $event.target.files[0].name;
-                                                                       const reader = new FileReader();
-                                                                       reader.onload = e => fotoPreview = e.target.result;
-                                                                       reader.readAsDataURL($event.target.files[0]);
-                                                                   }
-                                                               ">
-                                                    </label>
-                                                    <span class="ml-1">atau drag & drop</span>
-                                                </div>
-                                                <p class="mt-1 text-xs text-gray-400">PNG, JPG, WEBP — maks. 3MB</p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="flex gap-3 justify-end pt-1">
-                                        <button type="button" @click="modalFoto = false; fotoPreview = '';" class="rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">Batal</button>
-                                        <button type="submit" name="simpan_foto" class="rounded-xl bg-brand-500 px-5 py-2 text-sm font-medium text-white hover:bg-brand-600 shadow-sm focus:outline-none">Upload Foto</button>
-                                    </div>
-                                </form>
                             </div>
                         </div>
 
@@ -703,5 +561,148 @@
             });
         }
     </script>
+    <!-- ==================== -->
+    <!-- MODAL TAMBAH SPEK    -->
+    <!-- ==================== -->
+    <div x-show="modalTambah"
+         class="fixed inset-0 z-9999 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         x-cloak>
+        <div @click.outside="modalTambah = false"
+             class="w-full max-w-md rounded-2xl bg-white shadow-xl ring-1 ring-gray-200/50"
+             x-show="modalTambah"
+             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
+            <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+                <h3 class="text-base font-bold text-gray-800">Tambah Spesifikasi</h3>
+                <button @click="modalTambah = false" class="rounded-lg p-1 text-gray-400 hover:bg-gray-100 transition focus:outline-none">
+                    <i class='bx bx-x text-2xl'></i>
+                </button>
+            </div>
+            <form action="detail_alat.php?id=<?php echo $id; ?>" method="POST" class="p-6 space-y-4">
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700">Nama Spesifikasi</label>
+                    <input type="text" name="spek" required placeholder="Contoh: Daya Listrik, Berat, Dimensi..." class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                </div>
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700">Icon Boxicons <span class="text-gray-400 font-normal">(opsional)</span></label>
+                    <input type="text" name="iconspek" placeholder="Contoh: bx-bolt-circle, bx-chip, bx-cog" class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                    <p class="mt-1 text-[11px] text-gray-400">Cari nama icon di <a href="https://boxicons.com/icons?free=true" target="_blank" class="text-brand-500 underline">boxicons.com</a></p>
+                </div>
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700">Satuan / Nilai</label>
+                    <input type="text" name="satuan" required placeholder="Contoh: 220V, 5 kg, 30x40 cm..." class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                </div>
+                <div class="flex gap-3 justify-end pt-2">
+                    <button type="button" @click="modalTambah = false" class="rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">Batal</button>
+                    <button type="submit" name="simpan_spek" class="rounded-xl bg-brand-500 px-5 py-2 text-sm font-medium text-white hover:bg-brand-600 shadow-sm focus:outline-none">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== -->
+    <!-- MODAL EDIT SPEK      -->
+    <!-- ==================== -->
+    <div x-show="modalEdit"
+         class="fixed inset-0 z-9999 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         x-cloak>
+        <div @click.outside="modalEdit = false"
+             class="w-full max-w-md rounded-2xl bg-white shadow-xl ring-1 ring-gray-200/50"
+             x-show="modalEdit"
+             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
+            <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+                <h3 class="text-base font-bold text-gray-800">Edit Spesifikasi</h3>
+                <button @click="modalEdit = false" class="rounded-lg p-1 text-gray-400 hover:bg-gray-100 transition focus:outline-none">
+                    <i class='bx bx-x text-2xl'></i>
+                </button>
+            </div>
+            <form action="detail_alat.php?id=<?php echo $id; ?>" method="POST" class="p-6 space-y-4">
+                <input type="hidden" name="idspek" :value="editData.id">
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700">Nama Spesifikasi</label>
+                    <input type="text" name="spek" :value="editData.spek" required placeholder="Contoh: Daya Listrik..." class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                </div>
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700">Icon Boxicons <span class="text-gray-400 font-normal">(opsional)</span></label>
+                    <input type="text" name="iconspek" :value="editData.iconspek" placeholder="Contoh: bx-bolt-circle, bx-chip, bx-cog" class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                    <p class="mt-1 text-[11px] text-gray-400">Cari nama icon di <a href="https://boxicons.com/icons?free=true" target="_blank" class="text-brand-500 underline">boxicons.com</a></p>
+                </div>
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700">Satuan / Nilai</label>
+                    <input type="text" name="satuan" :value="editData.satuan" required placeholder="Contoh: 220V..." class="block w-full rounded-xl border border-gray-300 px-4 py-2.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500">
+                </div>
+                <div class="flex gap-3 justify-end pt-2">
+                    <button type="button" @click="modalEdit = false" class="rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">Batal</button>
+                    <button type="submit" name="update_spek" class="rounded-xl bg-brand-500 px-5 py-2 text-sm font-medium text-white hover:bg-brand-600 shadow-sm focus:outline-none">Perbarui</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== -->
+    <!-- MODAL TAMBAH FOTO    -->
+    <!-- ==================== -->
+    <div x-show="modalFoto"
+         class="fixed inset-0 z-9999 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+         x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         x-cloak>
+        <div @click.outside="modalFoto = false; fotoPreview = '';"
+             class="w-full max-w-md rounded-2xl bg-white shadow-xl ring-1 ring-gray-200/50"
+             x-show="modalFoto"
+             x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100"
+             x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100 scale-100" x-transition:leave-end="opacity-0 scale-95">
+            <div class="flex items-center justify-between border-b border-gray-100 px-6 py-4">
+                <h3 class="text-base font-bold text-gray-800">Tambah Foto Detail</h3>
+                <button @click="modalFoto = false; fotoPreview = '';" class="rounded-lg p-1 text-gray-400 hover:bg-gray-100 transition focus:outline-none">
+                    <i class='bx bx-x text-2xl'></i>
+                </button>
+            </div>
+            <form action="detail_alat.php?id=<?php echo $id; ?>" method="POST" enctype="multipart/form-data" class="p-6 space-y-4">
+                <div>
+                    <label class="mb-1.5 block text-sm font-medium text-gray-700">File Foto</label>
+                    <div class="relative mt-1 flex justify-center rounded-2xl border-2 border-dashed border-gray-200 px-6 py-8 transition-colors hover:bg-gray-50 overflow-hidden">
+                        <template x-if="fotoPreview">
+                            <div class="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white p-3">
+                                <img :src="fotoPreview" class="max-h-40 max-w-full rounded-xl object-contain shadow-sm mb-2">
+                                <p class="text-xs font-semibold text-gray-600 truncate max-w-full" x-text="fotoName"></p>
+                                <button type="button" @click="fotoPreview = ''; fotoName = ''; document.getElementById('input-foto').value = '';" 
+                                        class="mt-2 text-xs text-red-500 hover:underline focus:outline-none">Ganti foto</button>
+                            </div>
+                        </template>
+                        <div class="text-center" x-show="!fotoPreview">
+                            <i class='bx bx-cloud-upload text-4xl text-gray-300'></i>
+                            <div class="mt-3 flex text-sm text-gray-500 justify-center">
+                                <label for="input-foto" class="cursor-pointer font-semibold text-brand-500 hover:text-brand-600 focus-within:outline-none">
+                                    <span>Pilih file</span>
+                                    <input id="input-foto" name="fotodetail" type="file" accept="image/*" required class="sr-only"
+                                           @change="
+                                               if ($event.target.files.length) {
+                                                   fotoName = $event.target.files[0].name;
+                                                   const reader = new FileReader();
+                                                   reader.onload = e => fotoPreview = e.target.result;
+                                                   reader.readAsDataURL($event.target.files[0]);
+                                               }
+                                           ">
+                                </label>
+                                <span class="ml-1">atau drag &amp; drop</span>
+                            </div>
+                            <p class="mt-1 text-xs text-gray-400">PNG, JPG, WEBP — maks. 3MB</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-3 justify-end pt-1">
+                    <button type="button" @click="modalFoto = false; fotoPreview = '';" class="rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">Batal</button>
+                    <button type="submit" name="simpan_foto" class="rounded-xl bg-brand-500 px-5 py-2 text-sm font-medium text-white hover:bg-brand-600 shadow-sm focus:outline-none">Upload Foto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </body>
 </html>
