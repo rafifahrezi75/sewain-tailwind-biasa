@@ -2,19 +2,31 @@
     include 'auth_check.php';
     include '../config.php';
 
+    // filter logic
+    $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+    $idkategori_filter = isset($_GET['idkategori_filter']) ? mysqli_real_escape_string($conn, $_GET['idkategori_filter']) : '';
+
+    $where_clause = "WHERE 1=1";
+    if ($search != '') {
+        $where_clause .= " AND alat.nama_alat LIKE '%$search%'";
+    }
+    if ($idkategori_filter != '') {
+        $where_clause .= " AND alat.idkategori = '$idkategori_filter'";
+    }
+
     //pagination
     $limit = 5;
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     if ($page < 1) $page = 1;
     $start = ($page - 1) * $limit;
 
-    $countQuery = mysqli_query($conn, "SELECT COUNT(*) as total FROM alat");
+    $countQuery = mysqli_query($conn, "SELECT COUNT(*) as total FROM alat $where_clause");
     $countRow = mysqli_fetch_assoc($countQuery);
     $total_alat = $countRow['total'];
     $total_page = ceil($total_alat / $limit);
 
     // get data alat join dengan kategori
-    $query = mysqli_query($conn, "SELECT alat.*, kategori.kategori as nama_kategori, kategori.icon FROM alat LEFT JOIN kategori ON alat.idkategori = kategori.idkategori ORDER BY alat.idalat DESC LIMIT $start, $limit");
+    $query = mysqli_query($conn, "SELECT alat.*, kategori.kategori as nama_kategori, kategori.icon FROM alat LEFT JOIN kategori ON alat.idkategori = kategori.idkategori $where_clause ORDER BY alat.idalat DESC LIMIT $start, $limit");
 
     // get kategori untuk dropdown
     $query_kat = mysqli_query($conn, "SELECT * FROM kategori ORDER BY kategori ASC");
@@ -258,20 +270,34 @@
                 <div class="mx-auto w-full p-6">
                     
                 <div x-data="{ modalOpen: false, editModalOpen: false, editData: { id: '', nama: '', kategori: '', stok: '', harga: '', deskripsi: '' } }">
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-                        <h2 class="text-2xl font-bold text-gray-800">Daftar Alat Produksi</h2>
-                        <div class="flex items-center gap-3">
-                            <!-- Search bar -->
-                            <div class="relative">
+                    <div class="flex flex-col xl:flex-row xl:items-center justify-between mb-6 gap-4">
+                        <h2 class="text-2xl font-bold text-gray-800 shrink-0">Daftar Alat Produksi</h2>
+                        <form method="GET" action="alat.php" class="flex flex-wrap items-center gap-3">
+                            <select name="idkategori_filter" class="w-full sm:w-auto rounded-xl border border-gray-200 px-4 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-colors" onchange="this.form.submit()">
+                                <option value="">Semua Kategori</option>
+                                <?php
+                                    mysqli_data_seek($query_kat, 0); 
+                                    while($k = mysqli_fetch_array($query_kat)){
+                                        $selected = ($idkategori_filter == $k['idkategori']) ? 'selected' : '';
+                                        echo '<option value="' . $k['idkategori'] . '" '.$selected.'>' . htmlspecialchars($k['kategori']) . '</option>';
+                                    }
+                                ?>
+                            </select>
+                            
+                            <div class="relative w-full sm:w-auto">
                                 <i class='bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg'></i>
-                                <input type="text" placeholder="Cari alat..." class="pl-10 pr-4 py-2 w-full sm:w-64 rounded-xl border border-gray-200 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-colors">
+                                <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Cari alat..." class="pl-10 pr-4 py-2 w-full sm:w-48 xl:w-64 rounded-xl border border-gray-200 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-colors">
                             </div>
                             
-                            <button @click="modalOpen = true" class="flex shrink-0 items-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 shadow-sm">
-                                <i class='bx bx-plus text-lg'></i>
-                                <span class="hidden sm:inline">Tambah Alat</span>
-                            </button>
-                        </div>
+                            <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                                <button type="submit" class="rounded-xl bg-gray-100 text-gray-600 px-4 py-2 text-sm font-medium hover:bg-gray-200 transition-colors focus:outline-none">Cari</button>
+                                
+                                <button type="button" @click="modalOpen = true" class="flex shrink-0 items-center justify-center gap-2 rounded-xl bg-brand-500 px-4 py-2 text-sm font-medium text-white transition-all hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 shadow-sm">
+                                    <i class='bx bx-plus text-lg'></i>
+                                    <span class="hidden sm:inline">Tambah Alat</span>
+                                </button>
+                            </div>
+                        </form>
                     </div>
 
                     <!-- Data Table -->
@@ -377,13 +403,13 @@
                             </p>
                             <div class="mt-4 sm:mt-0 flex gap-2">
                                 <?php if($page > 1): ?>
-                                    <a href="?page=<?php echo $page - 1; ?>" class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-colors">Sebelumnya</a>
+                                    <a href="?page=<?php echo $page - 1; ?>&search=<?php echo urlencode($search); ?>&idkategori_filter=<?php echo urlencode($idkategori_filter); ?>" class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-colors">Sebelumnya</a>
                                 <?php else: ?>
                                     <button class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed" disabled>Sebelumnya</button>
                                 <?php endif; ?>
 
                                 <?php if($page < $total_page): ?>
-                                    <a href="?page=<?php echo $page + 1; ?>" class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-colors">Selanjutnya</a>
+                                    <a href="?page=<?php echo $page + 1; ?>&search=<?php echo urlencode($search); ?>&idkategori_filter=<?php echo urlencode($idkategori_filter); ?>" class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-500/50 transition-colors">Selanjutnya</a>
                                 <?php else: ?>
                                     <button class="rounded-lg border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-400 cursor-not-allowed" disabled>Selanjutnya</button>
                                 <?php endif; ?>
