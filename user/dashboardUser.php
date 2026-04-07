@@ -115,11 +115,13 @@
                 </div>
 
                 <div class="hidden lg:flex flex-1 max-w-md mx-8">
-                    <div class="relative w-full">
-                        <input type="text" placeholder="Cari Mixer, Oven, atau Kompor..."
+                    <form action="alatUser.php" method="GET" class="relative w-full">
+                        <input type="text" name="search" placeholder="Cari Mixer, Oven, atau Kompor..."
                             class="w-full bg-white cartoon-border rounded-2xl py-2.5 pl-11 pr-4 text-sm font-bold outline-none focus:bg-yellow-50 cartoon-shadow-sm">
-                        <i data-lucide="search" class="absolute left-4 top-3 w-4 h-4 text-black"></i>
-                    </div>
+                        <button type="submit" class="absolute left-4 top-3 text-black">
+                            <i data-lucide="search" class="w-4 h-4 text-black border-none bg-transparent"></i>
+                        </button>
+                    </form>
                 </div>
 
                 <div class="hidden md:flex items-center gap-6 text-sm font-extrabold text-gray-600">

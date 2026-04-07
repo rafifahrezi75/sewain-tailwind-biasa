@@ -14,6 +14,8 @@ if ($query_kategori) {
 }
 
 // get produk
+$search_filter = isset($_GET['search']) ? $_GET['search'] : '';
+
 $query_str = "SELECT alat.*, kategori.kategori 
               FROM alat 
               LEFT JOIN kategori ON alat.idkategori = kategori.idkategori 
@@ -22,6 +24,11 @@ $query_str = "SELECT alat.*, kategori.kategori
 if ($kat_filter !== 'Semua') {
     $safe_kat = mysqli_real_escape_string($conn, $kat_filter);
     $query_str .= " AND kategori.kategori = '$safe_kat'";
+}
+
+if ($search_filter !== '') {
+    $safe_search = mysqli_real_escape_string($conn, $search_filter);
+    $query_str .= " AND alat.nama_alat LIKE '%$safe_search%'";
 }
 
 $query_produk = mysqli_query($conn, $query_str);
@@ -159,7 +166,9 @@ if ($query_produk) {
                     <div>
                         <h1 id="kategoriTitle"
                             class="text-3xl font-black text-slate-900 tracking-tight uppercase italic bg-yellow-300 inline-block px-2 cartoon-border">
-                            <?= htmlspecialchars($kat_filter === 'Semua' ? 'Semua Alat' : $kat_filter) ?></h1>
+                            <?= htmlspecialchars($kat_filter === 'Semua' ? 'Semua Alat' : $kat_filter) ?>
+                            <?= $search_filter ? ' - "'.htmlspecialchars($search_filter).'"' : '' ?>
+                        </h1>
                         <p class="text-slate-500 text-xs font-black mt-2 uppercase italic">Menampilkan alat-alat pilihan
                             terbaik</p>
                     </div>
