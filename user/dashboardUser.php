@@ -527,9 +527,9 @@
                 </ul>
             </div>
             <div class="border-4 border-dashed border-white/20 p-6 rounded-3xl">
-                <p class="font-black italic text-xs uppercase tracking-widest mb-2">© 2026 SewaIn - Professional Gear
+                <p class="font-black italic text-xs uppercase tracking-widest mb-2">© 2026 SewaIn - Sewa Alat Produksi
                 </p>
-                <p class="text-[10px] text-blue-200 font-bold italic">Jl. Produksi Kreatif No. 123, Indonesia</p>
+                <p class="text-[10px] text-blue-200 font-bold italic">Jl. Kartini no.4 Sidoarjo, Jawa Timur, Indonesia</p>
             </div>
         </div>
     </footer>
