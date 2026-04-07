@@ -11,8 +11,12 @@ $id_user = $_SESSION['id_user'];
 
 // Query untuk tab aktif
 $q_aktif = mysqli_query($conn, "
-    SELECT p.*, a.nama_alat, a.gambar, pd.idalat,
-           (SELECT COUNT(*) FROM penyewaan_detail pd2 WHERE pd2.idsewa = p.idsewa) as total_item
+    SELECT 
+        p.*, 
+        ANY_VALUE(a.nama_alat) as nama_alat, 
+        ANY_VALUE(a.gambar) as gambar, 
+        ANY_VALUE(pd.idalat) as idalat,
+        (SELECT COUNT(*) FROM penyewaan_detail pd2 WHERE pd2.idsewa = p.idsewa) as total_item
     FROM penyewaan p 
     JOIN penyewaan_detail pd ON p.idsewa = pd.idsewa 
     JOIN alat a ON pd.idalat = a.idalat 
@@ -24,8 +28,13 @@ $aktif_count = mysqli_num_rows($q_aktif);
 
 // Query untuk tab selesai
 $q_selesai = mysqli_query($conn, "
-    SELECT p.*, a.nama_alat, a.gambar, pd.idalat, pp.tanggal_kembali,
-           (SELECT COUNT(*) FROM penyewaan_detail pd2 WHERE pd2.idsewa = p.idsewa) as total_item
+    SELECT 
+        p.*, 
+        ANY_VALUE(a.nama_alat) as nama_alat, 
+        ANY_VALUE(a.gambar) as gambar, 
+        ANY_VALUE(pd.idalat) as idalat, 
+        ANY_VALUE(pp.tanggal_kembali) as tanggal_kembali,
+        (SELECT COUNT(*) FROM penyewaan_detail pd2 WHERE pd2.idsewa = p.idsewa) as total_item
     FROM penyewaan p 
     JOIN penyewaan_detail pd ON p.idsewa = pd.idsewa 
     JOIN alat a ON pd.idalat = a.idalat 
