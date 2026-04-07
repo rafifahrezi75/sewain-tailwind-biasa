@@ -69,9 +69,9 @@
 
     // get alat
     $query = mysqli_query($conn, "SELECT alat.*, kategori.kategori, kategori.icon 
-                                  FROM alat 
-                                  LEFT JOIN kategori ON alat.idkategori = kategori.idkategori 
-                                  WHERE alat.idalat = '$id'");
+                                    FROM alat 
+                                    LEFT JOIN kategori ON alat.idkategori = kategori.idkategori 
+                                    WHERE alat.idalat = '$id'");
     if (mysqli_num_rows($query) == 0) {
         header("Location: alat.php");
         exit;
@@ -120,6 +120,11 @@
 
             <!-- Sidebar Nav -->
             <nav class="flex-1 space-y-2 overflow-y-auto px-3 py-4 scrollbar-hide">
+
+                <a href="dashboardAdmin.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                    <i class="bx bx-grid-alt text-xl shrink-0 opacity-80"></i>
+                    <span x-show="sidebarOpen" class="whitespace-nowrap">Dashboard</span>
+                </a>
 
                 <a href="kategori.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600 focus:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-layer text-xl shrink-0 opacity-80"></i>
@@ -561,9 +566,8 @@
             });
         }
     </script>
-    <!-- ==================== -->
+
     <!-- MODAL TAMBAH SPEK    -->
-    <!-- ==================== -->
     <div x-show="modalTambah"
          class="fixed inset-0 z-[60] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
          x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -602,9 +606,7 @@
         </div>
     </div>
 
-    <!-- ==================== -->
     <!-- MODAL EDIT SPEK      -->
-    <!-- ==================== -->
     <div x-show="modalEdit"
          class="fixed inset-0 z-[60] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
          x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
@@ -644,9 +646,7 @@
         </div>
     </div>
 
-    <!-- ==================== -->
     <!-- MODAL TAMBAH FOTO    -->
-    <!-- ==================== -->
     <div x-show="modalFoto"
          class="fixed inset-0 z-[60] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
          x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"

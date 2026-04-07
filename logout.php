@@ -32,7 +32,7 @@ session_destroy();
         </div>
         <div class="w-full">
             <div class="bg-yellow-300 cartoon-border px-6 py-4 font-black text-[10px] uppercase italic cartoon-shadow-sm flex items-center justify-center gap-3">
-                 Mengalihkan...
+                Mengalihkan...
             </div>
         </div>
     </div>
