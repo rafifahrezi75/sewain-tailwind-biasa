@@ -565,7 +565,7 @@
     <!-- MODAL TAMBAH SPEK    -->
     <!-- ==================== -->
     <div x-show="modalTambah"
-         class="fixed inset-0 z-9999 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+         class="fixed inset-0 z-[60] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
          x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
          x-cloak>
@@ -606,7 +606,7 @@
     <!-- MODAL EDIT SPEK      -->
     <!-- ==================== -->
     <div x-show="modalEdit"
-         class="fixed inset-0 z-9999 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+         class="fixed inset-0 z-[60] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
          x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
          x-cloak>
@@ -648,7 +648,7 @@
     <!-- MODAL TAMBAH FOTO    -->
     <!-- ==================== -->
     <div x-show="modalFoto"
-         class="fixed inset-0 z-9999 flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
+         class="fixed inset-0 z-[60] flex items-center justify-center bg-gray-900/50 p-4 backdrop-blur-sm"
          x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
          x-transition:leave="transition ease-in duration-150" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
          x-cloak>
