@@ -190,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'role' => $_SESSION['role'],
             'token' => md5($_SESSION['email'] . time())
         ]) : 'null' ?>,
-        redirectUrl: '<?= isset($_SESSION['role']) ? ($_SESSION['role'] === 'admin' ? "admin/alat.php" : "user/dashboardUser.php") : "" ?>'
+        redirectUrl: '<?= isset($_SESSION['role']) ? ($_SESSION['role'] === 'admin' ? "admin/dashboardAdmin.php" : "user/dashboardUser.php") : "" ?>'
     };
 </script>
 <script src="login.js"></script>

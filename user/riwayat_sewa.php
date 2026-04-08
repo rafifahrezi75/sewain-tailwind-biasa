@@ -13,9 +13,9 @@ $id_user = $_SESSION['id_user'];
 $q_aktif = mysqli_query($conn, "
     SELECT 
         p.*, 
-        ANY_VALUE(a.nama_alat) as nama_alat, 
-        ANY_VALUE(a.gambar) as gambar, 
-        ANY_VALUE(pd.idalat) as idalat,
+        MAX(a.nama_alat) as nama_alat, 
+        MAX(a.gambar) as gambar, 
+        MAX(pd.idalat) as idalat,
         (SELECT COUNT(*) FROM penyewaan_detail pd2 WHERE pd2.idsewa = p.idsewa) as total_item
     FROM penyewaan p 
     JOIN penyewaan_detail pd ON p.idsewa = pd.idsewa 
@@ -30,10 +30,10 @@ $aktif_count = mysqli_num_rows($q_aktif);
 $q_selesai = mysqli_query($conn, "
     SELECT 
         p.*, 
-        ANY_VALUE(a.nama_alat) as nama_alat, 
-        ANY_VALUE(a.gambar) as gambar, 
-        ANY_VALUE(pd.idalat) as idalat, 
-        ANY_VALUE(pp.tanggal_kembali) as tanggal_kembali,
+        MAX(a.nama_alat) as nama_alat, 
+        MAX(a.gambar) as gambar, 
+        MAX(pd.idalat) as idalat, 
+        MAX(pp.tanggal_kembali) as tanggal_kembali,
         (SELECT COUNT(*) FROM penyewaan_detail pd2 WHERE pd2.idsewa = p.idsewa) as total_item
     FROM penyewaan p 
     JOIN penyewaan_detail pd ON p.idsewa = pd.idsewa 
