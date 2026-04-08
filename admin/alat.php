@@ -460,6 +460,7 @@
                                                 <option disabled selected value="">Pilih Kategori...</option>
                                                 <?php 
                                                 if(mysqli_num_rows($query_kat) > 0){
+                                                    mysqli_data_seek($query_kat, 0);
                                                     while($k = mysqli_fetch_array($query_kat)){
                                                         echo '<option value="' . $k['idkategori'] . '">' . htmlspecialchars($k['kategori']) . '</option>';
                                                     }
