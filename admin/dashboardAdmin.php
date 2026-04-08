@@ -61,7 +61,27 @@
             $chartData[(int)$row['bulan_num']] = (int)$row['total'];
         }
     }
+
     $chartDataJs = json_encode(array_values($chartData));
+
+    $dataLabel = [];
+    $dataValue = [];
+
+    $query = mysqli_query($conn, "
+        SELECT k.kategori, COUNT(a.idalat) as total
+        FROM kategori k
+        LEFT JOIN alat a ON k.idkategori = a.idkategori
+        GROUP BY k.idkategori
+    ");
+
+    while ($row = mysqli_fetch_assoc($query)) {
+        $dataLabel[] = $row['kategori'];
+        $dataValue[] = $row['total'];
+    }
+
+    $labelJson = json_encode($dataLabel);
+    $valueJson = json_encode($dataValue);
+
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -128,6 +148,11 @@
                 <a href="pengembalianAdmin.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
                     <i class="bx bx-archive-in text-xl shrink-0 opacity-80"></i>
                     <span x-show="sidebarOpen" class="whitespace-nowrap">Pengembalian</span>
+                </a>
+
+                <a href="cetak_laporan.php" class="flex items-center gap-3 rounded-xl px-4 py-3 font-medium transition-all focus:outline-none text-white hover:bg-brand-600" :class="sidebarOpen ? 'justify-start' : 'md:justify-center px-0'">
+                    <i class="bx bx-archive-in text-xl shrink-0 opacity-80"></i>
+                    <span x-show="sidebarOpen" class="whitespace-nowrap">Cetak Laporan</span>
                 </a>
             </nav>
 
@@ -240,13 +265,28 @@
                     </div>
 
                     <!-- Chart Section -->
-                    <div class="mb-8 bg-white rounded-3xl p-6 shadow-sm ring-1 ring-gray-100">
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-xl font-bold text-gray-800">Statistik Penyewaan (<?= date('Y') ?>)</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+                        <!-- Line Chart (lebih lebar) -->
+                        <div class="lg:col-span-2 bg-white rounded-3xl p-6 shadow-sm ring-1 ring-gray-100">
+                            <h2 class="text-xl font-bold text-gray-800 mb-4">
+                                Statistik Penyewaan (<?= date('Y') ?>)
+                            </h2>
+                            <div class="relative h-80 w-full">
+                                <canvas id="rentalsChart"></canvas>
+                            </div>
                         </div>
-                        <div class="relative h-72 w-full">
-                            <canvas id="rentalsChart"></canvas>
+
+                        <!-- Pie Chart -->
+                        <div class="bg-white rounded-3xl p-6 shadow-sm ring-1 ring-gray-100">
+                            <h2 class="text-xl font-bold text-gray-800 mb-4">
+                                Statistik Kategori
+                            </h2>
+                            <div class="relative h-80 w-full">
+                                <canvas id="myPieChart"></canvas>
+                            </div>
                         </div>
+
                     </div>
 
                     <!-- Analytics & Recent Transactions Section -->
@@ -407,13 +447,16 @@
                         }
                     }
                 },
+                
                 scales: {
                     y: {
                         beginAtZero: true,
+                        suggestedMax: Math.max(...data) + 2,
                         ticks: {
                             precision: 0,
                             font: { family: "'Poppins', sans-serif", size: 11 },
-                            color: '#9ca3af'
+                            color: '#9ca3af',
+                            stepSize: 1
                         },
                         grid: {
                             color: '#f3f4f6',
@@ -435,6 +478,34 @@
                     intersect: false,
                     mode: 'index',
                 },
+                layout: {
+                padding: {
+                    top: 10,
+                    bottom: 0
+                }
+            }
+            }
+        });
+
+        const labels = <?= $labelJson ?>;
+        const dataPie = <?= $valueJson ?>;
+
+        const ctxPie = document.getElementById('myPieChart').getContext('2d');
+
+        new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: dataPie,
+                    backgroundColor: labels.map(() => 
+                        '#' + Math.floor(Math.random()*16777215).toString(16)
+                    )
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
             }
         });
     </script>
