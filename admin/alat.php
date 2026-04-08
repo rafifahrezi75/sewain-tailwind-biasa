@@ -2,18 +2,40 @@
     include 'auth_check.php';
     include '../config.php';
 
-    // filter logic
-    $search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
-    $idkategori_filter = isset($_GET['idkategori_filter']) ? mysqli_real_escape_string($conn, $_GET['idkategori_filter']) : '';
+   // filter logic
+$search = isset($_GET['search']) ? mysqli_real_escape_string($conn, $_GET['search']) : '';
+$idkategori_filter = isset($_GET['idkategori_filter']) ? mysqli_real_escape_string($conn, $_GET['idkategori_filter']) : '';
+$status_filter = isset($_GET['status_filter']) ? $_GET['status_filter'] : '';
 
-    $where_clause = "WHERE 1=1";
-    if ($search != '') {
+$where_clause = "WHERE 1=1";
+
+// search nama alat
+if ($search != '') {
+    $search_lower = strtolower(trim($search));
+
+    // kalau keyword status → JANGAN pakai LIKE nama
+    if ($search_lower == 'tersedia') {
+        $where_clause .= " AND alat.stok > 0";
+    } 
+    elseif ($search_lower == 'habis' || $search_lower == 'kosong') {
+        $where_clause .= " AND alat.stok = 0";
+    } 
+    else {
         $where_clause .= " AND alat.nama_alat LIKE '%$search%'";
     }
-    if ($idkategori_filter != '') {
-        $where_clause .= " AND alat.idkategori = '$idkategori_filter'";
-    }
+}
 
+// filter kategori
+if ($idkategori_filter != '') {
+    $where_clause .= " AND alat.idkategori = '$idkategori_filter'";
+}
+
+// filter ketersediaan 
+if ($status_filter == 'tersedia') {
+    $where_clause .= " AND alat.stok > 0";
+} elseif ($status_filter == 'habis') {
+    $where_clause .= " AND alat.stok = 0";
+}
     //pagination
     $limit = 5;
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
@@ -273,17 +295,29 @@
                     <div class="flex flex-col xl:flex-row xl:items-center justify-between mb-6 gap-4">
                         <h2 class="text-2xl font-bold text-gray-800 shrink-0">Daftar Alat Produksi</h2>
                         <form method="GET" action="alat.php" class="flex flex-wrap items-center gap-3">
-                            <select name="idkategori_filter" class="w-full sm:w-auto rounded-xl border border-gray-200 px-4 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-colors" onchange="this.form.submit()">
-                                <option value="">Semua Kategori</option>
-                                <?php
-                                    mysqli_data_seek($query_kat, 0); 
-                                    while($k = mysqli_fetch_array($query_kat)){
-                                        $selected = ($idkategori_filter == $k['idkategori']) ? 'selected' : '';
-                                        echo '<option value="' . $k['idkategori'] . '" '.$selected.'>' . htmlspecialchars($k['kategori']) . '</option>';
-                                    }
-                                ?>
+
+                            <select name="status_filter" 
+                             class="w-full sm:w-auto rounded-xl border border-gray-200 px-4 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-colors"onchange="this.form.submit()">
+                                <option value="">Semua Status</option>
+                                <option value="tersedia" <?= ($status_filter == 'tersedia') ? 'selected' : '' ?>>Tersedia</option>
+                                <option value="habis" <?= ($status_filter == 'habis') ? 'selected' : '' ?>>Habis</option>
                             </select>
-                            
+    
+                             <select name="idkategori_filter"
+                             class="w-full sm:w-auto rounded-xl border border-gray-200 px-4 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-colors"
+                               onchange="this.form.submit()">
+
+                             <option value="">Semua Kategori</option>
+                              <?php
+                                  mysqli_data_seek($query_kat, 0); 
+                                 while($k = mysqli_fetch_array($query_kat)){
+                                 $selected = ($idkategori_filter == $k['idkategori']) ? 'selected' : '';
+                                echo '<option value="' . $k['idkategori'] . '" '.$selected.'>' 
+                             . htmlspecialchars($k['kategori']) . 
+                             '</option>';
+                                }
+                          ?>
+                        </select>
                             <div class="relative w-full sm:w-auto">
                                 <i class='bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg'></i>
                                 <input type="text" name="search" value="<?= htmlspecialchars($search) ?>" placeholder="Cari alat..." class="pl-10 pr-4 py-2 w-full sm:w-48 xl:w-64 rounded-xl border border-gray-200 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 transition-colors">
