@@ -103,72 +103,58 @@
 <body class="pt-20">
 
     <nav id="main-nav" class="fixed top-0 w-full z-50 bg-white border-b-4 border-black transition-all">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-20 items-center">
-                <div class="flex items-center gap-2">
-                    <div
-                        class="w-10 h-10 bg-primary cartoon-border rounded-xl flex items-center justify-center cartoon-shadow-sm">
-                        <i data-lucide="layers" class="text-white w-6 h-6"></i>
-                    </div>
-                    <span class="text-2xl font-black text-gray-900 tracking-tighter">Sewa<span
-                            class="text-primary">In</span></span>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-20 items-center">
+            
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-primary cartoon-border rounded-xl flex items-center justify-center cartoon-shadow-sm">
+                    <i data-lucide="layers" class="text-white w-6 h-6"></i>
                 </div>
+                <span class="text-2xl font-black text-gray-900 tracking-tighter">Sewa<span class="text-primary">In</span></span>
+            </div>
 
-                <div class="hidden lg:flex flex-1 max-w-md mx-8">
-                    <form action="alatUser.php" method="GET" class="relative w-full">
-                        <input type="text" name="search" placeholder="Cari Mixer, Oven, atau Kompor..."
-                            class="w-full bg-white cartoon-border rounded-2xl py-2.5 pl-11 pr-4 text-sm font-bold outline-none focus:bg-yellow-50 cartoon-shadow-sm">
-                        <button type="submit" class="absolute left-4 top-3 text-black">
-                            <i data-lucide="search" class="w-4 h-4 text-black border-none bg-transparent"></i>
-                        </button>
-                    </form>
-                </div>
+            <div class="hidden lg:flex flex-1 max-w-md mx-8">
+                <form action="alatUser.php" method="GET" class="relative w-full">
+                    <input type="text" name="search" placeholder="Cari Mixer, Oven, atau Kompor..."
+                        class="w-full bg-white cartoon-border rounded-2xl py-2.5 pl-11 pr-4 text-sm font-bold outline-none focus:bg-yellow-50 cartoon-shadow-sm">
+                    <button type="submit" class="absolute left-4 top-3 text-black">
+                        <i data-lucide="search" class="w-4 h-4 text-black border-none bg-transparent"></i>
+                    </button>
+                </form>
+            </div>
 
+            <div class="flex items-center gap-4">
                 <div class="hidden md:flex items-center gap-6 text-sm font-extrabold text-gray-600">
-                    <a href="dashboardUser.php" class="nav-link active hover:text-primary transition">Beranda</a>
+                    <a href="#beranda" class="nav-link active hover:text-primary transition">Beranda</a>
                     <a href="#tentang" class="nav-link hover:text-primary transition">Tentang Kami</a>
                     <div class="relative dropdown group py-4 cursor-pointer">
                         <div class="flex items-center gap-1 font-extrabold group-hover:text-primary">Layanan <i
                                 data-lucide="chevron-down" class="w-4 h-4"></i></div>
-                        <div
-                            class="dropdown-menu absolute hidden left-0 mt-0 w-56 bg-white cartoon-border cartoon-shadow rounded-2xl overflow-hidden pt-2">
-                            <a href="alatUser.php"
-                                class="block px-5 py-4 hover:bg-yellow-50 text-gray-700 transition flex items-center gap-3 border-b-2 border-black">
-                                <div class="p-2 bg-orange-100 cartoon-border rounded-lg"><i data-lucide="layout-grid"
-                                        class="w-4 h-4 text-orange-500"></i></div>
-                                <div><span class="block font-black text-xs uppercase">Semua Alat</span><span
-                                        class="text-[10px] text-gray-400 font-bold">Lihat seluruh koleksi kami</span>
-                                </div>
+                        <div class="dropdown-menu absolute hidden left-0 mt-0 w-56 bg-white cartoon-border cartoon-shadow rounded-2xl overflow-hidden pt-2">
+                            <a href="alatUser.php" class="block px-5 py-4 hover:bg-yellow-50 text-gray-700 transition flex items-center gap-3 border-b-2 border-black">
+                                <div class="p-2 bg-orange-100 cartoon-border rounded-lg"><i data-lucide="layout-grid" class="w-4 h-4 text-orange-500"></i></div>
+                                <div><span class="block font-black text-xs uppercase">Semua Alat</span><span class="text-[10px] text-gray-400 font-bold">Lihat seluruh koleksi kami</span></div>
                             </a>
-                            <a href="#pinjam-alat"
-                                class="block px-5 py-4 hover:bg-yellow-50 text-gray-700 transition flex items-center gap-3">
-                                <div class="p-2 bg-teal-100 cartoon-border rounded-lg">
-                                    <i data-lucide="calendar-plus" class="w-4 h-4 text-primary"></i>
-                                </div>
-                                <div>
-                                    <span class="block font-black text-xs uppercase italic">Pinjam Alat</span>
-                                    <span class="text-[9px] text-gray-400 font-bold uppercase">Prosedur
-                                        Peminjaman</span>
-                                </div>
+                            <a href="#pinjam-alat" class="block px-5 py-4 hover:bg-yellow-50 text-gray-700 transition flex items-center gap-3">
+                                <div class="p-2 bg-teal-100 cartoon-border rounded-lg"><i data-lucide="calendar-plus" class="w-4 h-4 text-primary"></i></div>
+                                <div><span class="block font-black text-xs uppercase italic">Pinjam Alat</span><span class="text-[9px] text-gray-400 font-bold uppercase">Prosedur Peminjaman</span></div>
                             </a>
                             <a href="#pengembalian" class="block px-5 py-4 hover:bg-yellow-50 text-gray-700 transition flex items-center gap-3">
-                            <div class="p-2 bg-teal-100 cartoon-border rounded-lg">
-                             <i data-lucide="package-check" class="w-4 h-4 text-aksen"></i>
-                             </div>
-                                <div>
-                                    <span class="block font-black text-xs uppercase italic">Pengembalian</span>
-                                    <span class="text-[9px] text-gray-400 font-bold uppercase">Proses Retur Alat</span>
-                                </div>
+                                <div class="p-2 bg-teal-100 cartoon-border rounded-lg"><i data-lucide="package-check" class="w-4 h-4 text-aksen"></i></div>
+                                <div><span class="block font-black text-xs uppercase italic">Pengembalian</span><span class="text-[9px] text-gray-400 font-bold uppercase">Proses Retur Alat</span></div>
                             </a>
                         </div>
                     </div>
-                    <button onclick="toggleProfile()" class="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button transition-all uppercase text-xs font-black">
+                </div>
+
+                <button onclick="toggleProfile()" class="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl cartoon-border cartoon-shadow-sm cartoon-button transition-all uppercase text-xs font-black">
                     <i data-lucide="user" class="w-4 h-4"></i> <span id="nav-profile-text">Profil</span>
                     </button>
-                </div>
             </div>
+
         </div>
-    </nav>
+    </div>
+</nav>
 
     <section id="beranda" class="pt-20 pb-24 px-4 bg-[#F1F5F9]">
         <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
